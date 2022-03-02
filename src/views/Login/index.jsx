@@ -1,9 +1,11 @@
-import React from 'react';
-// import PropTypes from 'prop-types';
-// import bootstrap from 'bootstrap'
+import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
+import bootstrap from 'bootstrap'
 import $ from 'jquery';
 import alertify from 'alertifyjs';
-import { Link, Route, Routes, Navigate } from 'react-router-dom';
+import { Link, Route, Routes, useNavigate } from 'react-router-dom';
+import async from 'async';
+// import Dashboard from '../Dashboard';
 
 
 Login.propTypes = {
@@ -25,23 +27,31 @@ function Login(props) {
      })
 
 
-     /** Ajax post function */
-     function ajaxPost(url, data, successCallback, errorCallback = undefined) {
 
-          $.ajax({
+     let navigate = useNavigate();
+     const [userName, setUserName] = useState('')
+     const [password, setPassword] = useState('')
+     async function loginTest() {
+          let user = { userName, password }
+          let result = await fetch('https://192.168.0.142:9090/api/User/user-login', {
+               method: 'POST',
                headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
                },
-               type: 'POST',
-               url: url,
-               data: JSON.stringify(data),
-               dataType: 'json',
-               success: successCallback,
-               error: errorCallback
-          });
+               body: JSON.stringify(user)
+          })
+               .then(response => response.json())
+               .then(response => {
+                    if (response.isSuccess) {
+                         localStorage.setItem('user-token', JSON.stringify(response.data))
+                         navigate('/admin/dashboard')
+                    }
+                    else {
+                         alertify.alert('Thông tin tài khoản không đúng')
+                    }
+               })
      }
-
      function login() {
           let user = $('#ipt-username').val();
           let pass = $('#ipt-password').val();
@@ -55,25 +65,11 @@ function Login(props) {
                     UserName: user,
                     Password: pass,
                }
-               ajaxPost('/api/login', d, function (res) {
-                    if (res.IsSuccess) {
-                         if (res.Result.RoleName == "Intem") {
-                              window.location.href = "/admin/product/printlabel";
-                              // dùng route -> link
-                         } else {
-                              window.location.href = "/admin/dashboard";
-
-                         }
-                         localStorage.setItem('us_name', res.Result.FullName);
-                         localStorage.setItem('us_role', res.Result.RoleName);
-                    } else {
-                         alertify.alert(res.Message);
-                    }
-               })
-
+               loginTest()
           }
      }
      return (
+
           <div className="authentication-bg">
                <div className="account-pages pt-5 mb-5">
                     <div className="container">
@@ -90,24 +86,18 @@ function Login(props) {
                                              <div>
                                                   <div className="form-group">
                                                        <label>Tài khoản</label>
-                                                       <input id="ipt-username" className="form-control" tabIndex={1} type="text" placeholder="Tài khoản" autoFocus />
+                                                       <input id="ipt-username" onChange={(e) => setUserName(e.target.value)}
+                                                            className="form-control" tabIndex={1} type="text" placeholder="Tài khoản" autoFocus />
                                                   </div>
                                                   <div className="form-group">
                                                        <label>Mật khẩu</label>
-                                                       <input id="ipt-password" type="password" tabIndex={2} className="form-control" placeholder="Mật khẩu" autoComplete="off" />
+                                                       <input id="ipt-password" onChange={(e) => setPassword(e.target.value)}
+                                                            type="password" tabIndex={2} className="form-control" placeholder="Mật khẩu" autoComplete="off" />
                                                   </div>
 
                                                   <div className="form-group mb-0 w-100 mt-3 text-center">
-                                                       {/* <button onClick={login} className="btn btn-primary" tabIndex={4}>
-                                                            <i className="mdi mdi-login mr-1"></i>
-                                                            Đăng nhập
-                                                            <Routes>
-                                                                 <Route path="/dashboard" element={login ? <Navigate to="/dashboard" /> : <DashBoard />} />
-                                                            </Routes>
 
-     </button> */}
-                                                       
-                                                       <button href="" className="btn btn-primary" tabIndex={4}><i className="mdi mdi-login mr-1"></i>Đăng nhập </button>
+                                                       <button onClick={login} className="btn btn-primary" tabIndex={4}><i className="mdi mdi-login mr-1"></i>Đăng nhập </button>
 
 
                                                   </div>
@@ -119,13 +109,17 @@ function Login(props) {
                          </div>
                     </div>
                </div>
-               <div className="footer footer-alt">2021 &copy; Công ty TNHH Giải pháp Công nghệ Phần mềm kết nối số Việt Nam IOT Software</div>
+               <div className="footer footer-alt">2022 &copy; Nguyễn Minh Hiếu - Trần Văn Thuận - Huỳnh Văn Thảo</div>
 
+               {/* <Routes>
+                    <Route path="/dashboard" element={<Dashboard />} />
+               </Routes> */}
                {/* <script src="/assets/js/vendor.min.js"></script>
                <script src="/assets/js/i18n/vi.js"></script>
                <script src="/plugins/alertify/alertify.min.js"></script>
                <script src="~/lib/jquery/jquery.js"></script> */}
           </div>
+
      );
 }
 

@@ -68,6 +68,10 @@ function Login(props) {
                loginTest()
           }
      }
+
+     const Login1 =()=>{
+          console.log("thuan tran van")
+     }
      function HamNayDeTest() {
           let user = $('#ipt-username').val();
           let pass = $('#ipt-password').val();
@@ -83,6 +87,7 @@ function Login(props) {
                }
                loginTest()
           }
+
      }
      return (
 

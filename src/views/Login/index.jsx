@@ -68,8 +68,26 @@ function Login(props) {
                loginTest()
           }
      }
+
      const Login1 =()=>{
           console.log("thuan tran van")
+     }
+     function HamNayDeTest() {
+          let user = $('#ipt-username').val();
+          let pass = $('#ipt-password').val();
+          if (user == '') {
+               alertify.alert('Tài khoản không được để trống')
+          } else if (pass == '') {
+               alertify.alert('Mật khẩu không được để trống')
+          } else {
+
+               let d = {
+                    UserName: user,
+                    Password: pass,
+               }
+               loginTest()
+          }
+
      }
      return (
 

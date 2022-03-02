@@ -68,6 +68,9 @@ function Login(props) {
                loginTest()
           }
      }
+     const Login1 =()=>{
+          console.log("thuan tran van")
+     }
      return (
 
           <div className="authentication-bg">

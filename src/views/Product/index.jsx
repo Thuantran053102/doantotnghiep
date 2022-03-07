@@ -138,6 +138,7 @@ function Product(){
     const modalPriceRef = useRef()
     const modalinventoryRef =useRef()
     const modalajsMadalRef =useRef()
+    const dropdownmenuRef = useRef()
     // biến tạm
     const [ajsContent,setAjsContent] = useState('')
 
@@ -147,6 +148,7 @@ function Product(){
         setRetailPriceValue(retailPrice)
 
     }
+    
 
     const ShowModalStock=(inventory)=>{
         modalinventoryRef.current.classList.add(Style.show)
@@ -294,8 +296,8 @@ function Product(){
                                                                         <td className="text-right">{item.accessTimes}</td>
                                                                         <td className="text-center px-w-50">
                                                                             <div className="dropdown">
-                                                                                <a className="dropdown-toggle text-muted arrow-none cursor-pointer" data-toggle="dropdown" ><i className="mdi mdi-dots-vertical font-18 text-primary" ></i></a>
-                                                                                <div className="dropdown-menu dropdown-menu-right">
+                                                                                <a className="dropdown-toggle text-muted arrow-none cursor-pointer"  onClick={()=>{console.log(dropdownmenuRef.current)}} data-toggle="dropdown" ><i className="mdi mdi-dots-vertical font-18 text-primary" ></i></a>
+                                                                                <div className="dropdown-menu dropdown-menu-right" ref={dropdownmenuRef}>
                                                                                     <a href="/admin/product/detail/1904" className="a-detail dropdown-item cursor-pointer"><i className="mdi mdi-window-restore mr-1"></i>Xem chi tiết</a>
                                                                                     <a href="/admin/product/edit/1904" className="a-detail dropdown-item cursor-pointer"><i className="mdi mdi-export mr-1"></i>Cập nhật sản phẩm</a>
                                                                                     <a onClick={()=>{ShowModalPrice(item.ListedPrice,item.retailPrice)}} className="a-delete dropdown-item cursor-pointer"><i className="mdi mdi-cash-plus mr-1"></i>Cập nhật giá</a>

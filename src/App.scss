@@ -36,3 +36,9 @@
     transform: rotate(360deg);
   }
 }
+.daterangepicker{
+  display: flex;
+}
+.toggle.rs-btn{
+  display: none !important;
+}

@@ -5,6 +5,8 @@ import Product from "./views/Product"
 import Login from "./views/Login/index";
 import Account from "./views/Account/index";
 import Navbar from "./views/Navbar/index";
+import Post from "./views/Post"
+import './App.scss'
 
 
 
@@ -13,7 +15,7 @@ function App() {
   return (
    <>
    {/* <Navbar/> */}
-     <Account/>
+     <Product/>
    </>
   );
 }

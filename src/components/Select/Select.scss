@@ -16,6 +16,7 @@
     top: 100%;
     left: 0;
     right: 0;
+    box-shadow: 1px 2px 10px rgba(122, 121, 121,0.2);
     .selectItem{
         padding: 6px 12px;
         &:hover{
@@ -23,4 +24,13 @@
             background-color: #86C6F4;
         }
     }
+}
+.selectList::-webkit-scrollbar{
+    display: none;
+}
+.selectList.overflow-hide{
+    text-align: start;
+}
+.zindex-post{
+    z-index: 6;
 }

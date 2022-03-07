@@ -2,13 +2,19 @@ import { useEffect, useRef, useState } from "react"
 import Style from "./Post.module.scss"
 import {removeUnicode , changerangedate ,getTowDayAgo,getDay , changeday} from '../../utils/utils'
 import { FilterPost } from "../../utils/filterPost"
-import { getDateRangeValue } from "../../utils/utils"
+// import { getDateRangeValue } from "../../utils/utils"
 import Select from "../../components/Select/Select"
 import DateRangePicker from 'rsuite/DateRangePicker';
 import { startOfDay, endOfDay, addDays, subDays } from 'date-fns';
 import 'rsuite/dist/rsuite-rtl.min.css'
 import clsx from "clsx"
-import { data } from "jquery"
+// import { data } from "jquery"
+// import { Modal } from "bootstrap"
+import { Link } from "react-router-dom"
+import { actions } from "../../utils"
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import {faXmark} from '@fortawesome/free-solid-svg-icons'
+import Buttom from "../../components/Buttom"
 
 var APIPost=[
     {
@@ -40,31 +46,35 @@ var APIPost=[
         trangthai:'hiện'
     }
 ]
-function Post(){
-    let arraySearch=[]
-    const textMutedRef= useRef()
-    const downMenuRef = useRef()
-    function getRangDate(){
-        return new Promise(function(resolve){
-            rangeDateRef=document.getElementsByClassName(Style.rangeDate)
-            resolve(rangeDateRef)
-        })
-    }
-    var today = new Date();
-        var   datea = today.getDate()+'/'+(today.getMonth()+1)+'/'+today.getFullYear();
 
+function Post(){
+    //get datenow
+    var today = new Date();
+    var   datea = today.getDate()+'/'+(today.getMonth()+1)+'/'+today.getFullYear();
+
+    // list chọn
     const categoryList=['Tất cả','Tin tức','Khuyến mãi','Tư vấn','Tin tuyển dụng','Quy định và chính sách']
 
+    // biến trung gian
+    const presently='Ẩn',unPresently='Hiện'
+    // let arraySearch=[]
+
+
+    const textMutedRef= useRef()
+    const downMenuRef = useRef()
+    const textRef = useRef()
+    const showRef = useRef()
+
+    
+    // const [arrPortSearch,setArrPortSearch] =useState([...APIPost])
+    // const [arrcate,setArrcate] =useState([...APIPost])
     const [arrayPost,setArrayPost]= useState([...APIPost])
-
-    const [arrPortSearch,setArrPortSearch] =useState([...APIPost])
-    const [arrcate,setArrcate] =useState([...APIPost])
-
+    
     const [testSearchValue,setTestSearchValue] = useState('')
     const [categoryValue,setCategoryValue]=useState(categoryList[0])
     const [dateValue,setDateValue]=useState(datea +' - '+datea)
-    // const [nowArray,setNowArray]=useState([])
-    const textRef = useRef()
+    
+    // useEffect
     useEffect(()=>{
       setDateValue(document.getElementsByClassName('rs-picker-toggle-textbox')[0].value)
       FilterPost(APIPost,[arrayPost,setArrayPost],testSearchValue,categoryValue,dateValue)
@@ -79,6 +89,7 @@ function Post(){
     },[categoryValue])
 
  
+    // daterangpicker 
     const {
         allowedMaxDays,
         allowedDays,
@@ -111,13 +122,34 @@ function Post(){
     },
     ];
     const Label = props => {
-    return <label style={{ display: 'block', marginTop: 10 }} {...props} />;
+        return <label style={{ display: 'block', marginTop: 10 }} {...props} />;
     };
-    const ShowModal=()=>{
-        downMenuRef.current.classList.toggle('show')
-    }
+
+    // sự kiện (onClick)
     const loadTable=()=>{
        
+    }
+    const lookTypePost =(id,trangthai)=>{
+        // thay đỏi trạng thái hiện ẩn
+        const trangthaimoi=(removeUnicode(trangthai)===removeUnicode(unPresently))? presently:unPresently
+        showRef.current.classList.add(Style.show)
+        const content=showRef.current.getElementsByClassName(Style.description)
+        content[0].innerText='xác nhận '+ trangthaimoi+ ' sản phẩm '
+        // click nút đồng ý 
+        const btnAgree=showRef.current.getElementsByClassName('btn_pri')
+        btnAgree[0].onclick=function(){
+            console.log(btnAgree[0])
+        }
+    }
+    const deletePost=(id)=>{
+        showRef.current.classList.add(Style.show)
+        const content=showRef.current.getElementsByClassName(Style.description)
+        content[0].innerText='bạn có chắc muốn xóa mục này'
+         // click nút đồng ý 
+        const btnAgree=showRef.current.getElementsByClassName('btn_pri')
+        btnAgree[0].onclick=function(){
+            console.log(btnAgree[0])
+        }
     }
     return(
         <>  
@@ -214,7 +246,9 @@ function Post(){
                                                     </td>
                                                 </tr>
                                                 {
+                                                   
                                                     arrayPost.map(function(item,index){
+                                                        const  trangthai=(removeUnicode(item.trangthai)===removeUnicode(unPresently))? presently:unPresently
                                                         return(
                                                             <tr key={index}>
                                                             <td className="text-center">{index}</td>
@@ -224,20 +258,19 @@ function Post(){
                                                             <td>{item.ngaydang}</td>
                                                             <td><span className="badge badge-success-lighten">{item.trangthai}</span></td>
                                                             <td className="text-center px-w-50" >
-                                                                <div className="dropdown" onClick={()=>{ShowModal(downMenuRef)}} style={{top:'0'}}>
+                                                                <div className={clsx( Style.dropdown,"dropdown")}style={{top:'0'}}>
                                                                     <a className="dropdown-toggle text-muted arrow-none cursor-pointer" data-toggle="dropdown"><i className="mdi mdi-dots-vertical font-18 text-primary" ></i></a>
-                                                                    <div className={clsx('dropdown-menu dropdown-menu-right')} ref={downMenuRef}>
+                                                                    <div className={clsx( Style.dropdown_menu,'dropdown-menu dropdown-menu-right')} ref={downMenuRef}>
                                                                         <a href="/nhung-ly-do-ban-nen-ve-sinh-may-lanh-thuong-xuyen" target="_blank" className="a-detail dropdown-item cursor-pointer"><i className="mdi mdi-window-restore mr-1"></i>Xem chi tiết</a>
                                                                         <a href="/admin/post/edit/69" className="a-detail dropdown-item cursor-pointer"><i className="mdi mdi-export mr-1"></i>Cập nhật tin tức</a>
-                                                                        <a onClick="lookTypePost(69,1,'Xác nhận ẩn bài viết')" className="a-delete dropdown-item cursor-pointer"> <i className="mdi mdi-content-save-settings mr-1"></i>Ẩn bài viết</a>
-                                                                        <a onClick="deletePost(69)" className="a-delete dropdown-item cursor-pointer"><i className="mdi mdi-trash-can-outline mr-1"></i>Xóa tin</a>
+                                                                        <a onClick={()=>{lookTypePost(item.id,item.trangthai)}} className="a-delete dropdown-item cursor-pointer"> <i className="mdi mdi-content-save-settings mr-1"></i>{trangthai} bài viết</a>
+                                                                        <a onClick={()=>{deletePost(item.id)}} className="a-delete dropdown-item cursor-pointer"><i className="mdi mdi-trash-can-outline mr-1"></i>Xóa tin</a>
                                                                     </div>
                                                                 </div>
                                                             </td>
                                                         </tr>
                                                             
                                                         )
-                                                       
                                                     })
                                                 }
                                                 
@@ -247,8 +280,7 @@ function Post(){
                                     <div className="row">
                                         <div id="div-pagination-info" className="col-6 mt-2">
                                             đang xem
-                                            <b> {arrayPost.length} </b>
-                                            - 
+                                            <b> {arrayPost.length} </b> - 
                                             <b> 1 </b>
                                             trong 
                                             <b> {arrayPost.length} </b>
@@ -261,6 +293,24 @@ function Post(){
                         </div>
                     </div>
                 </div>
+                {/* thông báo ẩn hiện tin  */}
+                <div className={clsx(Style.modal)}  ref= {showRef} style={{position:'absolute',display:'block'}}>
+                    <div className={clsx(Style.announce)}>
+                        <div className={clsx(Style.title)}>
+                            <h5>Thông Báo</h5>
+                            <span onClick={()=>{actions.closeModal({myref:showRef,myclass:Style.show})}} ><FontAwesomeIcon icon={faXmark} /></span>
+                        </div>
+                        <div className={clsx(Style.description)}>
+                        </div>
+                        <div className={clsx(Style.footer)}>
+                            <Buttom spanClass={['btn_pri']} iconClass={['mdi-check']} func={()=>{}} content='đồng ý'/>
+                            <Buttom spanClass={['mr-2','ml-2']} iconClass={['mdi-cancel']} func={()=>{actions.closeModal({myref:showRef,myclass:Style.show})}} content='hủy bỏ'/>
+                        </div>
+                    </div>
+                </div>
+                
+
+
             </div>
         </>
     )

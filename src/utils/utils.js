@@ -3,7 +3,7 @@ import * as $ from "jquery"
 import * as bootstrap from "bootstrap";
 import { get } from "jquery";
 import { getDate } from "rsuite/esm/utils/dateUtils";
-// import moment from 'moment';
+import moment from 'moment';
 /** Alert toast config */
 const ROOT_URL = '/'
 export const alert = {

@@ -138,10 +138,16 @@ function Product(){
     const modalPriceRef = useRef()
     const modalinventoryRef =useRef()
     const modalajsMadalRef =useRef()
-    const dropdownmenuRef = useRef()
+
     // biến tạm
     const [ajsContent,setAjsContent] = useState('')
 
+
+    const showChildMenu=(idIndex)=>
+    {   
+        const item=document.getElementById(idIndex)
+        item.classList.toggle('show')
+    }
     const ShowModalPrice=(ListedPrice,retailPrice)=>{
         modalPriceRef.current.classList.add(Style.show)
         setlistedPriceValue(ListedPrice)
@@ -253,7 +259,7 @@ function Product(){
                                             <p>Tổng sản phẩm: <span className="text-primary" id="total-product">{
                                                 APIProduct.length
                                             }</span> sản phẩm</p>
-                                            <div className="table-responsive">
+                                            <div className="table-responsive" style={{overflow:'visible'}}>
                                                 <table id="btn-product" className="table table-hover table-centered">
                                                     <thead>
                                                         <tr>
@@ -296,8 +302,8 @@ function Product(){
                                                                         <td className="text-right">{item.accessTimes}</td>
                                                                         <td className="text-center px-w-50">
                                                                             <div className="dropdown">
-                                                                                <a className="dropdown-toggle text-muted arrow-none cursor-pointer"  onClick={()=>{console.log(dropdownmenuRef.current)}} data-toggle="dropdown" ><i className="mdi mdi-dots-vertical font-18 text-primary" ></i></a>
-                                                                                <div className="dropdown-menu dropdown-menu-right" ref={dropdownmenuRef}>
+                                                                                <a className={ clsx(Style.dropdownToggle, 'dropdown-toggle text-muted arrow-none cursor-pointer')}  data-toggle="dropdown" ><i className="mdi mdi-dots-vertical font-18 text-primary" ></i></a>
+                                                                                <div className={clsx(Style.dropdown_menu, "dropdown-menu dropdown-menu-right")} id={'productitem'+String(index)} >
                                                                                     <a href="/admin/product/detail/1904" className="a-detail dropdown-item cursor-pointer"><i className="mdi mdi-window-restore mr-1"></i>Xem chi tiết</a>
                                                                                     <a href="/admin/product/edit/1904" className="a-detail dropdown-item cursor-pointer"><i className="mdi mdi-export mr-1"></i>Cập nhật sản phẩm</a>
                                                                                     <a onClick={()=>{ShowModalPrice(item.ListedPrice,item.retailPrice)}} className="a-delete dropdown-item cursor-pointer"><i className="mdi mdi-cash-plus mr-1"></i>Cập nhật giá</a>
@@ -337,7 +343,7 @@ function Product(){
                     <div className="modal-content">
                         <div className="modal-header">
                             <h4 className="modal-title">Cập nhật giá</h4>
-                            <button  className={clsx(Style.closeModal , 'closeModal btn')} data-dismiss="modal" aria-hidden="true" onClick={()=>{actions.closeModal(modalPriceRef)}}>×</button>
+                            <button  className={clsx(Style.closeModal , 'closeModal btn')} data-dismiss="modal" aria-hidden="true" onClick={()=>{actions.closeModal({myref:modalPriceRef,myclass:Style.show})}}>×</button>
                         </div>
                         <div className="modal-body">
                             <div className="row">
@@ -360,7 +366,7 @@ function Product(){
                                 <button id="btn-update-price" type="button" className="btn btn-primary" onClick={()=>{
                                     console.log('giá niêm yết', listedPriceValue,'giá bán lẻ',retailPriceValue )
                                 }}>Cập nhật</button>
-                                <button type="button" className="btn btn-light" data-dismiss="modal" onClick={()=>{actions.closeModal(modalPriceRef)}}>Đóng</button>
+                                <button type="button" className="btn btn-light" data-dismiss="modal" onClick={()=>{actions.closeModal({myref:modalPriceRef,myclass:Style.show})}}>Đóng</button>
                             </div>
                         </div>
                     </div>
@@ -372,7 +378,7 @@ function Product(){
                     <div className="modal-content">
                         <div className="modal-header">
                             <h4 className="modal-title">Cập nhật số lượng tồn</h4>
-                            <button  className={clsx(Style.closeModal, "closeModal btn")} style={{fontSize:"1.2rem"}} data-dismiss="modal" aria-hidden="true" onClick={()=>{actions.closeModal(modalinventoryRef)}}>×</button>
+                            <button  className={clsx(Style.closeModal, "closeModal btn")} style={{fontSize:"1.2rem"}} data-dismiss="modal" aria-hidden="true" onClick={()=>{actions.closeModal({myref:modalinventoryRef,myclass:Style.show})}}>×</button>
                         </div>
                         <div className="modal-body">
                             <div className="row">
@@ -390,7 +396,7 @@ function Product(){
                             <button id="btn-update-stock" type="button" className="btn btn-primary" onClick={()=>{
                                 console.log(inventoryValue)
                             }}>Cập nhật</button>
-                            <button type="button" className="btn btn-light" data-dismiss="modal" onClick={()=>{actions.closeModal(modalinventoryRef)}}>Đóng</button>
+                            <button type="button" className="btn btn-light" data-dismiss="modal" onClick={()=>{actions.closeModal({myref:modalinventoryRef,myclass:Style.show})}}>Đóng</button>
                         </div>
                     </div>
                 </div>
@@ -407,7 +413,7 @@ function Product(){
                     </div>
                     <div className={clsx(Style.ajsFooter)}>
                             <Buttom spanClass={[Style.btn_pri]} iconClass={['mdi-check']} func={()=>{actions.closeModal(modalajsMadalRef)}} content='đồng ý'/>
-                            <Buttom spanClass={['mr-2','ml-2']} iconClass={['mdi-check']} func={()=>{actions.closeModal({modalajsMadalRef,myclass:Style.show})}} content='hủy bỏ'/>
+                            <Buttom spanClass={['mr-2','ml-2']} iconClass={['mdi-check']} func={()=>{actions.closeModal({myref:modalajsMadalRef,myclass:Style.show})}} content='hủy bỏ'/>
                     </div>
                 </div>
             </div>

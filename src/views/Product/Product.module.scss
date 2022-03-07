@@ -89,3 +89,21 @@ select.hoverItem:hover{
     padding: 0px 5px;
     margin-top: -10px;
 }
+.dropdownToggle:hover ~ .dropdown_menu,.dropdown_menu:hover{
+    display: block;
+}
+.dropdown_menu{
+    top: 100%;
+    right: 0;
+    left: auto;
+}
+.dropdown_menu::before{
+    content: '';
+    position: absolute;
+    height: 10px;
+    bottom: 10px;
+    top: -10px;
+    left: 0;
+    right: 0;
+
+}

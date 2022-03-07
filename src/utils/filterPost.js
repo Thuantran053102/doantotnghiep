@@ -8,7 +8,6 @@ import { unique } from './unique'
 export function FilterPost(APIPost,coppyArrayAPI,startInput,catevalue,dateValue){
     let array=[]
     const [start,setStart]= coppyArrayAPI
-    console.log('startInput',startInput)
     const tieude='tieude'
     const danhmuc='danhmuc'
     const ngaydang='ngaydang'

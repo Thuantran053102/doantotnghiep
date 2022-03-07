@@ -1,4 +1,4 @@
-import { Route, Routes,Link} from 'react-router-dom';
+import { Route, Routes, Link } from 'react-router-dom';
 import 'react-bootstrap';
 import Addproduct from "./views/Product/Addproduct"
 import Product from "./views/Product"
@@ -12,12 +12,11 @@ import './App.scss'
 
 
 function App() {
-  return (
-   <>
-   {/* <Navbar/> */}
-     <Product/>
-   </>
-  );
+    return ( 
+    <>
+        <Account />
+        </>
+    );
 }
 
 export default App;

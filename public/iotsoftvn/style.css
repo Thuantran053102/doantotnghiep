@@ -571,3 +571,15 @@ padding-left: 12px !important;
     text-decoration: none;
     color: #000000;
 }
+.btn_pri{
+    background-color: #3688fc !important;
+    color: aliceblue;
+}
+.btns.btn_pri:hover{
+    background-color: #2475e7 !important;
+    color: aliceblue;
+}
+.btns:hover{
+    background-color: rgb(189, 187, 187) !important;
+    color: aliceblue;
+}

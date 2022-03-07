@@ -14,7 +14,6 @@ export function filter(APIPort,coppyArrayAPI,startInput){
         APIPort.map(function(item,index){
             if(removeUnicode(item.danhmuc)===removeUnicode(stateInput))
             {
-
                 array=[...array,item]
             }
         })

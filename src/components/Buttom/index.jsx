@@ -1,6 +1,6 @@
 import clsx from 'clsx'
 import { memo, useEffect, useRef } from 'react'
-import './Buttom.scss'
+import Style from './Buttom.module.scss'
 
 
  function Buttom(props){
@@ -10,6 +10,7 @@ import './Buttom.scss'
     useEffect(()=>{
         spanClass.forEach(element => {
             spanRef.current.classList.add(element)
+            
         });
         iconClass.forEach(element=>{
             iconRef.current.classList.add(element)
@@ -17,7 +18,7 @@ import './Buttom.scss'
     },[])
     return(
         
-        <span className={clsx('btn btns')} ref={spanRef} onClick={func}>
+        <span className={clsx( Style.btns ,'btn btns')} ref={spanRef} onClick={func}>
              <i className={clsx("mdi  font-20 mr-1")} ref={iconRef} ></i>{content}
         </span>
     )

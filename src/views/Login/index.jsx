@@ -5,6 +5,7 @@ import $ from 'jquery';
 import alertify from 'alertifyjs';
 import { Link, Route, Routes, useNavigate } from 'react-router-dom';
 import async from 'async';
+import userApi from '../../api/User'
 // import Dashboard from '../Dashboard';
 
 
@@ -31,64 +32,80 @@ function Login(props) {
      let navigate = useNavigate();
      const [userName, setUserName] = useState('')
      const [password, setPassword] = useState('')
-     async function loginTest() {
-          let user = { userName, password }
-          let result = await fetch('https://192.168.0.142:9090/api/User/user-login', {
-               method: 'POST',
-               headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-               },
-               body: JSON.stringify(user)
-          })
-               .then(response => response.json())
-               .then(response => {
-                    if (response.isSuccess) {
-                         localStorage.setItem('user-token', JSON.stringify(response.data))
-                         navigate('/admin/dashboard')
-                    }
-                    else {
-                         alertify.alert('Thông tin tài khoản không đúng')
-                    }
-               })
-     }
-     function login() {
-          let user = $('#ipt-username').val();
-          let pass = $('#ipt-password').val();
-          if (user == '') {
-               alertify.alert('Tài khoản không được để trống')
-          } else if (pass == '') {
-               alertify.alert('Mật khẩu không được để trống')
-          } else {
-
-               let d = {
-                    UserName: user,
-                    Password: pass,
+     const login = async () => {
+          try {
+               const data = { userName, password }
+               const response = await userApi.login(data);
+               if (response.isSuccess) {
+                    localStorage.setItem('user-token', JSON.stringify(response.data))
+                    navigate('/admin/dashboard')
                }
-               loginTest()
+               else {
+                    alertify.alert('Thông tin tài khoản không đúng')
+               }
+          } catch (error) {
+               console.log(error);
           }
      }
 
-     const Login1 =()=>{
-          console.log("thuan tran van")
-     }
-     function HamNayDeTest() {
-          let user = $('#ipt-username').val();
-          let pass = $('#ipt-password').val();
-          if (user == '') {
-               alertify.alert('Tài khoản không được để trống')
-          } else if (pass == '') {
-               alertify.alert('Mật khẩu không được để trống')
-          } else {
+     // async function loginTest() {
+     //      let user = { userName, password }
+     //      let result = await fetch('https://192.168.0.142:9090/api/User/user-login', {
+     //           method: 'POST',
+     //           headers: {
+     //                'Accept': 'application/json',
+     //                'Content-Type': 'application/json'
+     //           },
+     //           body: JSON.stringify(user)
+     //      })
+     //           .then(response => response.json())
+     //           .then(response => {
+     //                if (response.isSuccess) {
+     //                     localStorage.setItem('user-token', JSON.stringify(response.data))
+     //                     navigate('/admin/dashboard')
+     //                }
+     //                else {
+     //                     alertify.alert('Thông tin tài khoản không đúng')
+     //                }
+     //           })
+     // }
+     // function login() {
+     //      let user = $('#ipt-username').val();
+     //      let pass = $('#ipt-password').val();
+     //      if (user == '') {
+     //           alertify.alert('Tài khoản không được để trống')
+     //      } else if (pass == '') {
+     //           alertify.alert('Mật khẩu không được để trống')
+     //      } else {
 
-               let d = {
-                    UserName: user,
-                    Password: pass,
-               }
-               loginTest()
-          }
+     //           let d = {
+     //                UserName: user,
+     //                Password: pass,
+     //           }
+     //           loginTest()
+     //      }
+     // }
 
-     }
+     // const Login1 =()=>{
+     //      console.log("thuan tran van")
+     // }
+     // function HamNayDeTest() {
+     //      let user = $('#ipt-username').val();
+     //      let pass = $('#ipt-password').val();
+     //      if (user == '') {
+     //           alertify.alert('Tài khoản không được để trống')
+     //      } else if (pass == '') {
+     //           alertify.alert('Mật khẩu không được để trống')
+     //      } else {
+
+     //           let d = {
+     //                UserName: user,
+     //                Password: pass,
+     //           }
+     //           loginTest()
+     //      }
+
+     // }
      return (
 
           <div className="authentication-bg">

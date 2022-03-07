@@ -4,6 +4,9 @@ import alertify from "alertifyjs";
 import $ from 'jquery';
 import * as utils from '../../utils/utils.js';
 import { Alert } from 'bootstrap';
+import { useEffect } from "react";
+import userApi from '../../api/User'
+import { useNavigate } from "react-router-dom";
 Account.propTypes = {
 
 };
@@ -15,6 +18,8 @@ function Account(props) {
 
     initSelectRole();
     reloadTable();
+
+
 
 
     var CURRENT_IMG_PATH = "";
@@ -419,7 +424,7 @@ function Account(props) {
                         </div>
                         <div className="modal-footer">
                             <button type="button" className="btn btn-light" data-bs-dismiss="modal">Đóng</button>
-                            <button onClick={(e) => handleModalAddSubmit(e)} type="submit" className="btn btn-primary" type="submit">Thêm mới</button>
+                            <button onClick={(e) => handleModalAddSubmit(e)} className="btn btn-primary" type="submit">Thêm mới</button>
                         </div>
                     </div>
                 </div>

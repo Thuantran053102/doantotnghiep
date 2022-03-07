@@ -1,7 +1,9 @@
 import alertify from "alertifyjs";
 import * as $ from "jquery"
 import * as bootstrap from "bootstrap";
-import moment from 'moment';
+import { get } from "jquery";
+import { getDate } from "rsuite/esm/utils/dateUtils";
+// import moment from 'moment';
 /** Alert toast config */
 const ROOT_URL = '/'
 export const alert = {
@@ -380,7 +382,7 @@ export function IsNullOrEmpty(text) {
     return false;
 }
 
-/*file to object*/
+/*file to object*/ // lấy name và value của input
 export function formToObject(nameForm) {
     let obj = {};
     let a = $(nameForm).serializeArray();
@@ -476,7 +478,7 @@ export async function ajaxDelete(url, successCallback, errorCallback, isAsync = 
         async: isAsync
     });
 }
-/*Make url friendly*/
+/*Make url friendly*/ 
 export function MakeUrl(str) {
     var AccentsMap = [
         "aàảãáạăằẳẵắặâầẩẫấậ",
@@ -508,14 +510,49 @@ export function MakeUrl(str) {
     str = str.replace(/--/g, '-');
     return str.toLowerCase();
 }
-
+export function changeday(str)
+{
+    str =str.replace(/-/g, '/');
+    return str
+}
+let sumItemdate=''
+let date=''
+export function SumDate(date){
+    sumItemdate=date.slice(0,date.indexOf('/'))
+    sumItemdate=Number(sumItemdate) + Number(date.slice(date.indexOf('/')+1,date.lastIndexOf('/')))*30
+    sumItemdate=Number(sumItemdate)+Number(date.slice(date.lastIndexOf('/')+1,))*365
+    return sumItemdate
+}
+export function changerangedate(str){
+    let myStr= str
+    str =str.slice(str.indexOf('/')+1,str.indexOf('/')+3)
+    str= (str/2) ?str.slice(0,1): ('0'+str.slice(0,1))
+    myStr=myStr.slice(0,myStr.indexOf('/')+1)+str+myStr.slice(myStr.lastIndexOf('/'))
+    return myStr
+}
+export function getTowDayAgo(str){
+    str= str.slice(0,str.indexOf('/'))-2+str.slice(str.indexOf('/'))
+    return str
+}
+export function getDay(str){
+    str= str.slice(0,str.indexOf('/'))
+    return str
+}
+export function getMonth(str){
+    str= str.slice(str.indexOf('/')+1)
+    str= str.slice(0,str.indexOf('/'))
+    return str
+}
+// ẩn hiện element
 export function showLoading() {
     $('#preloader').fadeIn(300);
 }
 export function hideLoading() {
     $('#preloader').fadeOut(500);
 }
-
+ export function toggleLoading() {
+    $('#preloader').fadeToggle(300);
+}
 /** Get start-date and end-date in daterangepicker */
 export function getDateRangeValue(element) {
     let string = $(element).val();
@@ -527,11 +564,14 @@ export function getDateRangeValue(element) {
 }
 $('#ipt-date-search').val("")
 
+
+
 export function removeUnicode(str) {
         var AccentsMap = [
             "aàảãáạăằẳẵắặâầẩẫấậ",
             "AÀẢÃÁẠĂẰẲẴẮẶÂẦẨẪẤẬ",
-            "dđ", "DĐ",
+            "dđ", 
+            "DĐ",
             "eèẻẽéẹêềểễếệ",
             "EÈẺẼÉẸÊỀỂỄẾỆ",
             "iìỉĩíị",
@@ -544,8 +584,8 @@ export function removeUnicode(str) {
             "YỲỶỸÝỴ"
         ];
         for (var i = 0; i < AccentsMap.length; i++) {
-            var re = new RegExp('[' + AccentsMap[i].substr(1) + ']', 'g');
-            var char = AccentsMap[i][0];
+            var re = new RegExp('[' + AccentsMap[i].substr(1) + ']', 'g');// []
+            var char = AccentsMap[i][0];// a
             str = str.replace(re, char);
             if (AccentsMap[i] == ' ' && AccentsMap[i + 1] == ' ') {
                 AccentsMap[i + 1] = '';

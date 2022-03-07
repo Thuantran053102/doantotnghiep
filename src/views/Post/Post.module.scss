@@ -1,0 +1,28 @@
+.textMuted{
+    display: none;
+}
+.textMuted.show{
+    display: table-row;
+}
+.ranges{
+    ul{
+        li{
+
+        }
+        li:hover{
+           background-color: #c5ddff !important;
+        }
+    }
+}
+.rangeDate{
+    width: 100%;
+    svg{
+        display: none;
+    }
+}
+.rangeDate:hover{
+  border-color:#333 ;
+}
+.table_responsive{
+    overflow: visible;
+}

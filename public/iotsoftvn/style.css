@@ -1,4 +1,4 @@
-﻿﻿@import url("https://cdn.syncfusion.com/ej2/material.css")
+﻿﻿/* @import url("https://cdn.syncfusion.com/ej2/material.css") */
 
 ::-webkit-scrollbar {
     width: 5px;
@@ -458,7 +458,7 @@ body[data-layout=topnav] .footer {
     color: black;
     font-size: 15px;
     font-weight: bold;
-    margin-top: 0px !imortant;
+    margin-top: 0px ;
 }
 
 .print-sm-p1 {

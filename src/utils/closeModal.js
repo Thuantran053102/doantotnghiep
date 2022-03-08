@@ -6,6 +6,7 @@ export const closeModal = props =>{
     const {myref ,myclass,...syn} =props
     myref.current.classList.remove(myclass)
 }
+// chưa dùng được
 
 
 

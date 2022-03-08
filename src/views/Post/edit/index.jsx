@@ -1,13 +1,15 @@
 import Style from './edit.module.scss'
-import { createReactEditorJS } from 'react-editor-js'
-import React, { Component } from 'react';
-import { Editor } from 'react-draft-wysiwyg';
-
-
-
-
-const ReactEditorJS = createReactEditorJS()
+import Example from '../../../components/Editor'
+import { useState, useEffect } from 'react'
 function  Edit(){
+
+    const [editorValue,setEditorValue]= useState('')
+
+    useEffect(()=>{
+		console.log('s',editorValue)
+		
+	},[editorValue])
+
     return(
         <>
             <div class="container-fluid">
@@ -104,16 +106,7 @@ function  Edit(){
                                         <div class="row">
                                             <div class="col-md-12">
                                                 {/* <textarea id="editor"></textarea> */}
-                                                <Editor
-                                                    editorState={editorState}
-                                                    wrapperClassName="demo-wrapper"
-                                                    editorClassName="demo-editor"
-                                                    onEditorStateChange={this.onEditorStateChange}
-                                                    />
-                                                    <textarea
-                                                    disabled
-                                                    value={draftToHtml(convertToRaw(editorState.getCurrentContent()))}
-                                                    />
+                                                <Example myState={[editorValue,setEditorValue]}/>
                                             </div>
                                         </div>
                                     </div>
@@ -128,6 +121,7 @@ function  Edit(){
                         </div>
                     </div>
                     <div class="col-md-2">
+                      
                         {/* <div class="card sticky-top">
                             <div class="card-body">
                                 <label>Từ khóa</label>
@@ -145,6 +139,7 @@ function  Edit(){
             <div id="div-add-img d-none">
                 <button id="btn-add-img" style={{opacity:0}}></button>
             </div>
+           
         </>
     )
 }

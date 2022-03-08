@@ -7,7 +7,7 @@ import Account from "./views/Account/index";
 import Navbar from "./views/Navbar/index";
 import Post from "./views/Post"
 import Edit from './views/Post/edit';
-import './App.scss'
+import './App.scss';
 
 
 

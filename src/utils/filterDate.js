@@ -1,5 +1,7 @@
 import { SumDate } from "./utils"
-export function DateFilter(APIArray,startInput,ngaydang){
+// lọc item theo ngày và tháng 
+// ngày +tháng*30 + năm*365
+export function FilterDate(APIArray,startInput,ngaydang){
     let array=[]
     const stateInput=  startInput
     const property=ngaydang

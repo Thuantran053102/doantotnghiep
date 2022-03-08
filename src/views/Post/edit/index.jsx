@@ -2,13 +2,13 @@ import Style from './edit.module.scss'
 import { createReactEditorJS } from 'react-editor-js'
 import React, { Component } from 'react';
 import { Editor } from 'react-draft-wysiwyg';
-
-
-
-
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import { editorState, convertToRaw } from 'draft-js';
+import draftToHtml from 'draftjs-to-html';
+import htmlToDraft from 'html-to-draftjs';
 const ReactEditorJS = createReactEditorJS()
-function  Edit(){
-    return(
+function Edit() {
+    return (
         <>
             <div class="container-fluid">
                 <div class="row">
@@ -63,7 +63,7 @@ function  Edit(){
                                                 <div class="form-group">
                                                     <span class="text-danger mt-2"> * Lưu ý: Đường đẫn tin chỉ bao gồm chữ cái, số và những kí tự gạch ngang "-" và kí tự gạch chân "_". </span>
                                                     <br /><label>Đường dẫn tin</label>
-                                                    <input id="ipt-edit-post-friendly-url"  name="FiendlyUrl" type="text" class="form-control" placeholder="" />
+                                                    <input id="ipt-edit-post-friendly-url" name="FiendlyUrl" type="text" class="form-control" placeholder="" />
                                                 </div>
                                             </div>
                                             <div class="col-md-12">
@@ -109,11 +109,11 @@ function  Edit(){
                                                     wrapperClassName="demo-wrapper"
                                                     editorClassName="demo-editor"
                                                     onEditorStateChange={this.onEditorStateChange}
-                                                    />
-                                                    <textarea
+                                                />
+                                                <textarea
                                                     disabled
                                                     value={draftToHtml(convertToRaw(editorState.getCurrentContent()))}
-                                                    />
+                                                />
                                             </div>
                                         </div>
                                     </div>
@@ -122,7 +122,7 @@ function  Edit(){
                             <div class="col-12">
                                 <button onclick="UpdatePost()" type="button" class="btn btn-primary float-right"><i class="mdi mdi-check-bold font-16 mr-1"></i>Cập nhật bài viết</button>
                             </div>
-                            <div id="div-add-img" style={{visibility:'hidden'}} class="col-md-12">
+                            <div id="div-add-img" style={{ visibility: 'hidden' }} class="col-md-12">
                                 <button id="test-upload" type="button" class="btn btn-primary btn-sm float-right"><i class="mdi mdi-plus-circle font-16 mr-1"></i>Thêm hình ảnh</button>
                             </div>
                         </div>
@@ -143,7 +143,7 @@ function  Edit(){
                 </div>
             </div>
             <div id="div-add-img d-none">
-                <button id="btn-add-img" style={{opacity:0}}></button>
+                <button id="btn-add-img" style={{ opacity: 0 }}></button>
             </div>
         </>
     )

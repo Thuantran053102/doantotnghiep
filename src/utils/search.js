@@ -1,3 +1,4 @@
+import {removeUnicode} from './utils'
 export function Searchfilter(APIArray,startInput,tieude)
 {
     let array=[]

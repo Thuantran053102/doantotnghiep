@@ -1,16 +1,16 @@
 import alertify from "alertifyjs";
 import * as $ from "jquery"
 import * as bootstrap from "bootstrap";
-import { get } from "jquery";
+import {get } from "jquery";
 import { getDate } from "rsuite/esm/utils/dateUtils";
 import moment from 'moment';
 /** Alert toast config */
 const ROOT_URL = '/'
 export const alert = {
-    info: function (text) { $.toast({ text: text, position: 'bottom-right', icon: 'info', loader: false }) },
-    warning: function (text) { $.toast({ text: text, position: 'bottom-right', icon: 'warning', loader: false }) },
-    error: function (text) { $.toast({ text: text, position: 'bottom-right', icon: 'error', loader: false }) },
-    success: function (text) { $.toast({ text: text, position: 'bottom-right', icon: 'success', loader: false }) }
+    info: function(text) { $.toast({ text: text, position: 'bottom-right', icon: 'info', loader: false }) },
+    warning: function(text) { $.toast({ text: text, position: 'bottom-right', icon: 'warning', loader: false }) },
+    error: function(text) { $.toast({ text: text, position: 'bottom-right', icon: 'error', loader: false }) },
+    success: function(text) { $.toast({ text: text, position: 'bottom-right', icon: 'success', loader: false }) }
 }
 
 try {
@@ -33,19 +33,19 @@ try {
 }
 
 /** Fix size dropdown in table */
-$('.table-responsive').on('show.bs.dropdown', function () {
+$('.table-responsive').on('show.bs.dropdown', function() {
     $('.table-responsive').css("overflow", "inherit");
 });
 
 /** Fix size dropdown in table */
-$('.table-responsive').on('hide.bs.dropdown', function () {
+$('.table-responsive').on('hide.bs.dropdown', function() {
     $('.table-responsive').css("overflow", "auto");
 })
 
 /** Delay */
-var delay = (function () {
+var delay = (function() {
     var timer = 0;
-    return function (callback, ms) {
+    return function(callback, ms) {
         clearTimeout(timer);
         timer = setTimeout(callback, ms);
     };
@@ -203,8 +203,8 @@ export function isAuthorized(right_id) {
         _RIGHT = str_right.split(' ');
     }
     let right_id_arr = right_id.split(' ');
-    return _RIGHT.some(function (_r) {
-        return right_id_arr.some(function (r) {
+    return _RIGHT.some(function(_r) {
+        return right_id_arr.some(function(r) {
             return r === _r;
         });
     });
@@ -246,12 +246,12 @@ export function isPhoneNumber(phone) {
  * .applyBtn, .cancelBtn: Button for datepicker
  * .navbar-toggler: Button dropdown menu mobile
  */
-$('button').not('[data-toggle="dropdown"], [data-toggle="tooltip"], [data-dismiss="modal"], [type="submit"], .right-bar-toggle, .undisable-click, .ajs-button, .applyBtn, .cancelBtn, .navbar-toggler').on('click', function () {
+$('button').not('[data-toggle="dropdown"], [data-toggle="tooltip"], [data-dismiss="modal"], [type="submit"], .right-bar-toggle, .undisable-click, .ajs-button, .applyBtn, .cancelBtn, .navbar-toggler').on('click', function() {
     let $this = $(this);
     $this.find('.mdi').addClass('d-none');
     $this.prepend('<i class="mdi mdi-spin mdi-loading mr-1"></i>');
     $this.attr('disabled', true);
-    delay(function () {
+    delay(function() {
         $this.find('.mdi-spin').remove();
         $this.find('.mdi').removeClass('d-none');
         $this.removeAttr('disabled');
@@ -289,7 +289,7 @@ export function parseTimeAgo(dateString) {
  * selector: element table
  * type: type export (csv, txt, json, xml, sql, xlsx, doc, png, pdf)
  */
- export function openTableExport(selector, type, fileName) {
+export function openTableExport(selector, type, fileName) {
     var options = { outputImages: true };
     $.extend(true, options, { type: type, fileName: fileName });
     $(selector).tableExport(options);
@@ -299,7 +299,7 @@ export function parseTimeAgo(dateString) {
  *  items: Item show,
  *  autoPlay: Second auto play,
  */
- export function initCarousel(element, item, autoPlay) {
+export function initCarousel(element, item, autoPlay) {
     var $element = $(element);
     if ($element.length > 0) {
         $element.owlCarousel({
@@ -319,7 +319,7 @@ export function parseTimeAgo(dateString) {
  * items: Item show,
  * autoPlay: Second auto play,
  */
- export function initCarouselProduct(element, item, autoPlay) {
+export function initCarouselProduct(element, item, autoPlay) {
     var $element = $(element);
     if ($element.length > 0) {
         $element.owlCarousel({
@@ -343,7 +343,7 @@ export function parseTimeAgo(dateString) {
 /** Print this */
 export function printThis(element, callback = null) {
     $(element).printThis({
-        afterPrint: function (e) { callback(e); }
+        afterPrint: function(e) { callback(e); }
     });
 }
 
@@ -357,7 +357,7 @@ export function getEmptyOrDefault(text) {
  * Element: btn thực hiện action
  action : sự kiện khi bấm btn đồng ý trong modal
  */
- export function showModal(modal, element = null, action = null) {
+export function showModal(modal, element = null, action = null) {
     window.$(modal).modal('show');
     if (action != null && action != undefined) {
 
@@ -386,7 +386,7 @@ export function IsNullOrEmpty(text) {
 export function formToObject(nameForm) {
     let obj = {};
     let a = $(nameForm).serializeArray();
-    $.each(a, function (index, item) {
+    $.each(a, function(index, item) {
         obj[item.name] = item.value;
     });
     return obj;
@@ -440,8 +440,7 @@ export async function ajaxGet(url, data, successCallback, errorCallback, isAsync
             error: errorCallback,
             async: isAsync
         });
-    } catch (e) {
-    }
+    } catch (e) {}
 }
 
 /** Ajax post function */
@@ -456,7 +455,7 @@ export async function ajaxPut(url, data, successCallback, errorCallback) {
             'Content-Type': 'application/json'
         },
         success: successCallback,
-        error: function (e) {
+        error: function(e) {
             alertify.error(e);
             errorCallback();
 
@@ -478,7 +477,7 @@ export async function ajaxDelete(url, successCallback, errorCallback, isAsync = 
         async: isAsync
     });
 }
-/*Make url friendly*/ 
+/*Make url friendly*/
 export function MakeUrl(str) {
     var AccentsMap = [
         "aàảãáạăằẳẵắặâầẩẫấậ",
@@ -510,37 +509,36 @@ export function MakeUrl(str) {
     str = str.replace(/--/g, '-');
     return str.toLowerCase();
 }
-export function changeday(str)
-{
-    str =str.replace(/-/g, '/');
+export function changeday(str) {
+    str = str.replace(/-/g, '/');
     return str
 }
-let sumItemdate=''
-let date=''
-export function SumDate(date){
-    sumItemdate=date.slice(0,date.indexOf('/'))
-    sumItemdate=Number(sumItemdate) + Number(date.slice(date.indexOf('/')+1,date.lastIndexOf('/')))*30
-    sumItemdate=Number(sumItemdate)+Number(date.slice(date.lastIndexOf('/')+1,))*365
+let sumItemdate = ''
+let date = ''
+export function SumDate(date) {
+    sumItemdate = date.slice(0, date.indexOf('/'))
+    sumItemdate = Number(sumItemdate) + Number(date.slice(date.indexOf('/') + 1, date.lastIndexOf('/'))) * 30
+    sumItemdate = Number(sumItemdate) + Number(date.slice(date.lastIndexOf('/') + 1, )) * 365
     return sumItemdate
 }
-export function changerangedate(str){
-    let myStr= str
-    str =str.slice(str.indexOf('/')+1,str.indexOf('/')+3)
-    str= (str/2) ?str.slice(0,1): ('0'+str.slice(0,1))
-    myStr=myStr.slice(0,myStr.indexOf('/')+1)+str+myStr.slice(myStr.lastIndexOf('/'))
+export function changerangedate(str) {
+    let myStr = str
+    str = str.slice(str.indexOf('/') + 1, str.indexOf('/') + 3)
+    str = (str / 2) ? str.slice(0, 1) : ('0' + str.slice(0, 1))
+    myStr = myStr.slice(0, myStr.indexOf('/') + 1) + str + myStr.slice(myStr.lastIndexOf('/'))
     return myStr
 }
-export function getTowDayAgo(str){
-    str= str.slice(0,str.indexOf('/'))-2+str.slice(str.indexOf('/'))
+export function getTowDayAgo(str) {
+    str = str.slice(0, str.indexOf('/')) - 2 + str.slice(str.indexOf('/'))
     return str
 }
-export function getDay(str){
-    str= str.slice(0,str.indexOf('/'))
+export function getDay(str) {
+    str = str.slice(0, str.indexOf('/'))
     return str
 }
-export function getMonth(str){
-    str= str.slice(str.indexOf('/')+1)
-    str= str.slice(0,str.indexOf('/'))
+export function getMonth(str) {
+    str = str.slice(str.indexOf('/') + 1)
+    str = str.slice(0, str.indexOf('/'))
     return str
 }
 // ẩn hiện element
@@ -550,7 +548,7 @@ export function showLoading() {
 export function hideLoading() {
     $('#preloader').fadeOut(500);
 }
- export function toggleLoading() {
+export function toggleLoading() {
     $('#preloader').fadeToggle(300);
 }
 /** Get start-date and end-date in daterangepicker */
@@ -567,30 +565,30 @@ $('#ipt-date-search').val("")
 
 
 export function removeUnicode(str) {
-        var AccentsMap = [
-            "aàảãáạăằẳẵắặâầẩẫấậ",
-            "AÀẢÃÁẠĂẰẲẴẮẶÂẦẨẪẤẬ",
-            "dđ", 
-            "DĐ",
-            "eèẻẽéẹêềểễếệ",
-            "EÈẺẼÉẸÊỀỂỄẾỆ",
-            "iìỉĩíị",
-            "IÌỈĨÍỊ",
-            "oòỏõóọôồổỗốộơờởỡớợ",
-            "OÒỎÕÓỌÔỒỔỖỐỘƠỜỞỠỚỢ",
-            "uùủũúụưừửữứự",
-            "UÙỦŨÚỤƯỪỬỮỨỰ",
-            "yỳỷỹýỵ",
-            "YỲỶỸÝỴ"
-        ];
-        for (var i = 0; i < AccentsMap.length; i++) {
-            var re = new RegExp('[' + AccentsMap[i].substr(1) + ']', 'g');// []
-            var char = AccentsMap[i][0];// a
-            str = str.replace(re, char);
-            if (AccentsMap[i] == ' ' && AccentsMap[i + 1] == ' ') {
-                AccentsMap[i + 1] = '';
-                i = i - 1;
-            }
+    var AccentsMap = [
+        "aàảãáạăằẳẵắặâầẩẫấậ",
+        "AÀẢÃÁẠĂẰẲẴẮẶÂẦẨẪẤẬ",
+        "dđ",
+        "DĐ",
+        "eèẻẽéẹêềểễếệ",
+        "EÈẺẼÉẸÊỀỂỄẾỆ",
+        "iìỉĩíị",
+        "IÌỈĨÍỊ",
+        "oòỏõóọôồổỗốộơờởỡớợ",
+        "OÒỎÕÓỌÔỒỔỖỐỘƠỜỞỠỚỢ",
+        "uùủũúụưừửữứự",
+        "UÙỦŨÚỤƯỪỬỮỨỰ",
+        "yỳỷỹýỵ",
+        "YỲỶỸÝỴ"
+    ];
+    for (var i = 0; i < AccentsMap.length; i++) {
+        var re = new RegExp('[' + AccentsMap[i].substr(1) + ']', 'g'); // []
+        var char = AccentsMap[i][0]; // a
+        str = str.replace(re, char);
+        if (AccentsMap[i] == ' ' && AccentsMap[i + 1] == ' ') {
+            AccentsMap[i + 1] = '';
+            i = i - 1;
         }
-        return str.toLowerCase();
+    }
+    return str.toLowerCase();
 }

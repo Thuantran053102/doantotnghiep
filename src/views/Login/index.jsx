@@ -30,12 +30,14 @@ function Login(props) {
 
 
      let navigate = useNavigate();
+
      const [userName, setUserName] = useState('')
      const [password, setPassword] = useState('')
      const login = async () => {
           try {
                const data = { userName, password }
                const response = await userApi.login(data);
+               console.log(response);
                if (response.isSuccess) {
                     localStorage.setItem('user-token', JSON.stringify(response.data))
                     navigate('/admin/dashboard')
@@ -43,69 +45,12 @@ function Login(props) {
                else {
                     alertify.alert('Thông tin tài khoản không đúng')
                }
+
           } catch (error) {
                console.log(error);
           }
      }
 
-     // async function loginTest() {
-     //      let user = { userName, password }
-     //      let result = await fetch('https://192.168.0.142:9090/api/User/user-login', {
-     //           method: 'POST',
-     //           headers: {
-     //                'Accept': 'application/json',
-     //                'Content-Type': 'application/json'
-     //           },
-     //           body: JSON.stringify(user)
-     //      })
-     //           .then(response => response.json())
-     //           .then(response => {
-     //                if (response.isSuccess) {
-     //                     localStorage.setItem('user-token', JSON.stringify(response.data))
-     //                     navigate('/admin/dashboard')
-     //                }
-     //                else {
-     //                     alertify.alert('Thông tin tài khoản không đúng')
-     //                }
-     //           })
-     // }
-     // function login() {
-     //      let user = $('#ipt-username').val();
-     //      let pass = $('#ipt-password').val();
-     //      if (user == '') {
-     //           alertify.alert('Tài khoản không được để trống')
-     //      } else if (pass == '') {
-     //           alertify.alert('Mật khẩu không được để trống')
-     //      } else {
-
-     //           let d = {
-     //                UserName: user,
-     //                Password: pass,
-     //           }
-     //           loginTest()
-     //      }
-     // }
-
-     // const Login1 =()=>{
-     //      console.log("thuan tran van")
-     // }
-     // function HamNayDeTest() {
-     //      let user = $('#ipt-username').val();
-     //      let pass = $('#ipt-password').val();
-     //      if (user == '') {
-     //           alertify.alert('Tài khoản không được để trống')
-     //      } else if (pass == '') {
-     //           alertify.alert('Mật khẩu không được để trống')
-     //      } else {
-
-     //           let d = {
-     //                UserName: user,
-     //                Password: pass,
-     //           }
-     //           loginTest()
-     //      }
-
-     // }
      return (
 
           <div className="authentication-bg">
@@ -148,14 +93,6 @@ function Login(props) {
                     </div>
                </div>
                <div className="footer footer-alt">2022 &copy; Nguyễn Minh Hiếu - Trần Văn Thuận - Huỳnh Văn Thảo</div>
-
-               {/* <Routes>
-                    <Route path="/dashboard" element={<Dashboard />} />
-               </Routes> */}
-               {/* <script src="/assets/js/vendor.min.js"></script>
-               <script src="/assets/js/i18n/vi.js"></script>
-               <script src="/plugins/alertify/alertify.min.js"></script>
-               <script src="~/lib/jquery/jquery.js"></script> */}
           </div>
 
      );

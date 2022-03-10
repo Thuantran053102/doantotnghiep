@@ -12,6 +12,9 @@ import Dropdown from 'react-bootstrap/Dropdown'
 import EditAccount from "./Edit/index";
 import Select from 'react-select'
 import { Table } from 'react-bootstrap';
+import AddAccount from "./Add/index";
+import ResetPassword from "./ResetPassword/index";
+import useFetch from '../../utils/customHook.js';
 Account.propTypes = {
 
 };
@@ -34,19 +37,16 @@ function Account(props) {
 
     // Show modal edit
     const [modalEdit, setModalEdit] = useState(false)
+    const [modalResetPassword, setModalResetPassword] = useState(false)
+    const [modalAddAccount, setModalAddAccount] = useState(false)
 
     // Id user
     const [infoUser, setInfoUser] = useState({})
-    console.log('infouser first:', infoUser)
+    // console.log('infouser first:', infoUser)
 
     // Dữ liệu của select
     const [roleSelect, setRoleSelect] = useState([])
-    // const optionsRole = [{ value: 0, label: 'Tất cả' }]
-    // roleSelect.forEach(item => {
-    //     optionsRole.push({ value: item.id, label: item.name })
-    // })
-    // console.log('options:', optionsRole)
-    // Gọi API lấy dữ liệu
+
     useEffect(() => {
         const getAllUsers = async () => {
             try {
@@ -59,7 +59,6 @@ function Account(props) {
                 const responseRole = await userApi.getRoles()
                 setAccountList(response.data)
                 setRoleSelect(responseRole.data)
-                console.log(roleSelect)
             }
             catch (e) {
                 console.error(e)
@@ -206,7 +205,7 @@ function Account(props) {
             try {
                 const response = await userApi.get(id)
                 if (response.isSuccess) {
-                    console.log('res: ', response.data)
+                    // console.log('res: ', response.data)
                     setInfoUser(response.data)
                     // console.log('info:', infoUser)
                 }
@@ -240,57 +239,17 @@ function Account(props) {
         // }
         // utils.showModal("#modal-edit");
     }
-    function setModalEditFalse() {
+    function setModalFalse() {
         setModalEdit(false);
+        setModalResetPassword(false)
+        setModalAddAccount(false)
         // setUserName();
     }
 
-    /*Reload table*/
-    // function reloadTable() {
-    //     utils.ajaxGet('User', {
-    //         keyword: $('#ipt-text-search').val(),
-    //         positionId: parseInt($('#sl-role').val() == undefined ? 0 : $('#sl-role').val()),
-    //         statusId: parseInt($('#sl-status').val())
-    //     }, res => {
-    //         if (res.IsSuccess) {
-    //             let data = res.Result;
-    //             let html = data.map((item, i) => (
-    //                 `<tr>
-    //                             <td>${i + 1}</td>
-    //                             <td className="table-user">
-    //                                 <img src="${utils.getImagePath(item.Avatar)}" className="mr-2 rounded-circle">
-    //                                     <a onClick={void(0)} className="text-body font-weight-semibold">${item.FullName}</a>
-    //                                             </td>
-    //                                 <td>${item.Phone}</td>
-    //                                 <td>${item.Email}</td>
-    //                                 <td>${item.UserName}</td>
-    //                                 <td>${item.RoleName}</td>
-    //                                 <td>
-    //                                     <span className="badge badge-${(item.Status == 1 ? 'success' : 'danger')}-lighten">${(item.Status == 1 ? 'Đang hoạt động' : 'Khóa')}</span>
-    //                                 </td>
-    //                                 <td className="text-center px-w-50">
-    //                                 <div className="dropdown">
-    //                                     <a className="dropdown-toggle text-muted arrow-none cursor-pointer" data-toggle="dropdown"><i className="mdi mdi-dots-vertical font-18 text-primary"></i></a>
-    //                                     <div className="dropdown-menu dropdown-menu-right">
-    //                                         <a onClick={()=>showModalEdit(${item.Id})} className="a-detail dropdown-item cursor-pointer"><i className="mdi mdi-window-restore mr-1"></i>Chi tiết</a>
-    //                                         <a onClick={()=>changePassword(${item.Id})} className="a-detail dropdown-item cursor-pointer"><i className="mdi mdi-lock-reset mr-1"></i>Đặt lại mật khẩu</a>
-    //                                         <a onClick={()=>toggleStatus(${item.Id},${item.Status},'${item.FullName}')} className="a-detail toggleActive(${item.Id, item.Status}) dropdown-item cursor-pointer"><i className="mdi ${item.Status == 1 ? 'mdi-lock-outline' : 'mdi-lock-open-variant-outline'} mr-1"></i>${item.Status == 1 ? 'Khóa' : 'Mở khóa'}</a>
-    //                                       </div>
-    //                                 </div>
-    //                         </tr>`
-    //             ));
-    //             $('#tbl-body').html(html);
-    //         }
-    //     });
-    // }
+
 
     function initSelectRole() {
-        //initSelect({
-        //    Element: "#sl-role",
-        //    Url: "user/",
-        //    Value: "Name",
-        //    Id: "Id"
-        //});
+
         let html = "";
         utils.ajaxGet('user/GetAllPosition', '', function (res) {
             if (res.IsSuccess) {
@@ -306,28 +265,29 @@ function Account(props) {
     }
 
     function changePassword(id) {
-        utils.showModal('#modal-change-pass');
-        $("#form-change-pass").trigger("reset");
-        $('#modal-change-pass').find("#form-change-pass").unbind().on('submit', function (e) {
-            e.preventDefault();
-            let text = utils.formToObject("#form-change-pass").Password;
-            if (utils.IsNullOrEmpty(text) || text.length < 6)
-                alertify.error("Mật khẩu không được nhỏ hơn 6 kí tự");
-            else {
-                utils.ajaxPost('User/ResetPassword/' + id, {
-                    NewPassword: text
-                }, function (res) {
-                    if (res.IsSuccess) {
-                        alertify.alert("Đổi mật khẩu thành công")
-                        utils.hideModal('#modal-change-pass');
-                    }
-                })
-            }
-        })
+        setModalResetPassword(true);
+        // utils.showModal('#modal-change-pass');
+        // $("#form-change-pass").trigger("reset");
+        // $('#modal-change-pass').find("#form-change-pass").unbind().on('submit', function (e) {
+        //     e.preventDefault();
+        //     let text = utils.formToObject("#form-change-pass").Password;
+        //     if (utils.IsNullOrEmpty(text) || text.length < 6)
+        //         alertify.error("Mật khẩu không được nhỏ hơn 6 kí tự");
+        //     else {
+        //         utils.ajaxPost('User/ResetPassword/' + id, {
+        //             NewPassword: text
+        //         }, function (res) {
+        //             if (res.IsSuccess) {
+        //                 alertify.alert("Đổi mật khẩu thành công")
+        //                 utils.hideModal('#modal-change-pass');
+        //             }
+        //         })
+        //     }
+        // })
     }
     function toggleStatus(id, curentStatus, fullName) {
         let newSttName = curentStatus == 1 ? 'Khóa' : 'Mở khóa'
-        alertify.confirm("Xác nhận " + newSttName + " tài khoản " + fullName, function () {
+        alertify.confirm("Xác nhận '' " + newSttName + " '' tài khoản '' " + fullName + " ''", function () {
             const lockStatus = async () => {
                 try {
                     const response = newSttName === 'Khóa' ? await userApi.lock(id) : await userApi.unLock(id)
@@ -349,7 +309,7 @@ function Account(props) {
                     <div className="col-12">
                         <div className="page-title-box">
                             <div className="page-title-right">
-                                <button onClick={() => utils.showModal('#modal-add')} type="button" className="btn btn-primary"><i className="mdi mdi-plus-circle font-16 mr-1"></i>Thêm tài khoản</button>
+                                <button onClick={() => setModalAddAccount(true)} type="button" className="btn btn-primary"><i className="mdi mdi-plus-circle font-16 mr-1"></i>Thêm tài khoản</button>
                             </div>
                             <h4 className="page-title">Tài khoản hệ thống</h4>
                         </div>
@@ -394,12 +354,13 @@ function Account(props) {
                                 <div className="page-aside-right">
                                     {/* <!-- Table --> */}
                                     {/* className="table table-centered table-hover dt-responsive nowrap w-100" */}
-                                    <Table responsive="lg" id="products-datatable">
+                                    <Table striped responsive="lg" id="products-datatable">
                                         <thead>
                                             <tr>
                                                 <th className="stt">
                                                     #
                                                 </th>
+                                                <th></th>
                                                 <th>Họ và tên</th>
                                                 <th>Điện thoại</th>
                                                 <th>Email</th>
@@ -413,26 +374,26 @@ function Account(props) {
                                             {
                                                 accountList.map((item, index) => (
                                                     <tr key={index}>
-                                                        <td>{index + 1}</td>
-                                                        <td className="table-user">
+                                                        <td className="align-middle">{index + 1}</td>
+                                                        <td className="align-middle ">
                                                             <img src="${utils.getImagePath(item.avatar)}" className="mr-2 rounded-circle" />
-                                                            <p className="text-body font-weight-semibold">{item.fullName}</p>
                                                         </td>
-                                                        <td>{item.phoneNumber}</td>
-                                                        <td>{item.email}</td>
-                                                        <td>{item.userName}</td>
-                                                        <td>{item.name}</td>
-                                                        <td>
+                                                        <td className="align-middle ">{item.fullName}</td>
+                                                        <td className="align-middle">{item.phoneNumber}</td>
+                                                        <td className="align-middle">{item.email}</td>
+                                                        <td className="align-middle">{item.userName}</td>
+                                                        <td className="align-middle">{item.name}</td>
+                                                        <td className="align-middle">
                                                             <span className={clsx('badge', item.status === 1 ? 'badge-success-lighten' : 'badge-danger-lighten')}>{(item.status == 1 ? 'Đang hoạt động' : 'Khóa')}</span>
                                                         </td>
-                                                        <td className="text-center px-w-50">
+                                                        <td className=" text-center ">
                                                             <Dropdown className="d-inline mx-2">
                                                                 <Dropdown.Toggle id="dropdown-autoclose-true">
                                                                     <i className="text-light mdi mdi-dots-vertical font-18 text-primary"></i>
                                                                 </Dropdown.Toggle>
 
                                                                 <Dropdown.Menu>
-                                                                    <Dropdown.Item onClick={() => showModalEdit(item.id)}>Chi tiết</Dropdown.Item>
+                                                                    <Dropdown.Item onClick={() => showModalEdit(item.id)}>Chỉnh sửa tài khoản</Dropdown.Item>
                                                                     <Dropdown.Divider />
                                                                     <Dropdown.Item onClick={() => changePassword(item.id)} >Đặt lại mật khẩu</Dropdown.Item>
                                                                     <Dropdown.Divider />
@@ -452,159 +413,16 @@ function Account(props) {
                 </div>
             </div>
             {/* <!--  Modal change pas --> */}
-            <div className="modal fade" id="modal-change-pass">
-                <div className="modal-dialog modal-lg">
-                    <div className="modal-content">
-                        <div className="modal-header">
-                            <h4 className="modal-title">Đổi mật khẩu</h4>
-                            <button type="button" className="close" data-bs-dismiss="modal" aria-hidden="true">×</button>
-                        </div>
-                        <form id="form-change-pass">
-                            <div className="modal-body">
-                                <div className="row">
-                                    <div className="col-lg-12">
-                                        <div className="form-group mb-3">
-                                            <label>Mật khẩu mới <span className="text-danger"> &nbsp;* </span></label>
-                                            <div className="input-group">
-                                                <input type="text" name="Password" className="form-control" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="modal-footer">
-                                <button id="btn-add" type="submit" className="btn btn-primary">Đổi mật khẩu</button>
-                                <button type="button" className="btn btn-light" data-bs-dismiss="modal">Đóng</button>
-                            </div>
-                        </form>
-                    </div> {/* <!-- /.modal-content --> */}
-                </div> {/* <!-- /.modal-dialog --> */}
-            </div>{/* <!-- /.modal --> */}
+            <ResetPassword show={modalResetPassword} setModalFalse={setModalFalse} reloadTable={reloadTable} />
 
             {/* Modal tạo tài khoản */}
-            <div className="modal " id="modal-add">
-                <div className="modal-dialog modal-lg">
-                    <div className="modal-content">
-                        <div className="modal-header">
-                            <h4 className="modal-title" id="myLargeModalLabel">Tạo tài khoản</h4>
-                            <button type="button" className="close" data-bs-dismiss="modal" aria-hidden="true">×</button>
-                        </div>
-                        <div className="modal-body">
-                            <div className="row">
-                                <div className="col-lg-12">
-                                    <form id="form-add">
-                                        <div className="row">
-                                            <div className="col-md-4">
-                                                <div className="form-group text-center">
-                                                    <img className="img-fluid cursor-pointer rounded-circle col-md-8" id="img-avatar-add" src="~/images/default-avatar.jpg" alt='img' />
-                                                </div>
-                                            </div>
-                                            <div className="col-md-8">
-                                                <div className="form-group mb-3 ">
-                                                    <label>
-                                                        Họ tên
-                                                        <span className="text-danger">&nbsp;*</span>
-                                                    </label>
-                                                    <input type="text" className="form-control" name="FullName" placeholder="Nguyễn Văn A" />
-                                                </div>
-                                                <div className="form-group mb-3">
-                                                    <label>Số điện thoại</label>
-                                                    <input type="text" className="form-control" name="Phone" placeholder="xxxx-xxx-xxx " />
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="row">
-                                            <div className="form-group col-md-6">
-                                                <label>Email</label>
-                                                <input type="text" className="form-control" name="Email" placeholder="abc@gmail.com" />
-                                            </div>
-                                            <div className="form-group col-md-6">
-                                                <label>
-                                                    Chức vụ
-                                                    <span className="text-danger">&nbsp;*</span>
-                                                </label>
-                                                <select className="select2 form-control " id="sl-role-add" name="RoleId" data-toggle="select2-no-search" data-placeholder="Chọn chức vụ ...">
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div className="row">
-                                            <div className="form-group mb-3 col-md-6">
-                                                <label>Tên tài khoản<span className="text-danger">&nbsp;*</span></label>
-                                                <input type="text" className="form-control" name="UserName" placeholder="nguyenvana" />
-                                            </div>
-                                            <div className="form-group mb-3 col-md-6">
-                                                <label>
-                                                    Mật khẩu
-                                                    <span className="text-danger">&nbsp;*</span>
-                                                </label>
-                                                <input type="text" className="form-control" name="Password" placeholder="********" />
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="modal-footer">
-                            <button type="button" className="btn btn-light" data-bs-dismiss="modal">Đóng</button>
-                            <button onClick={(e) => handleModalAddSubmit(e)} className="btn btn-primary" type="submit">Thêm mới</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <AddAccount show={modalAddAccount} setModalFalse={setModalFalse} reloadTable={reloadTable} />
+
 
             {/* Modal chỉnh sửa tài khoản */}
-            <EditAccount show={modalEdit} infoUser={infoUser} setModalEditFalse={setModalEditFalse} />
+            <EditAccount show={modalEdit} infoUser={infoUser} setModalFalse={setModalFalse} reloadTable={reloadTable} />
 
-            {/* Model thông tin tài khoản  */}
-            <div className="modal" id="modal-profile">
-                <div className="modal-dialog modal-lg">
-                    <div className="modal-content">
-                        <div className="modal-header">
-                            <h4 className="modal-title" id="myLargeModalLabel">Thông tin tài khoản</h4>
-                            <button type="button" className="close" data-dismiss="modal" aria-hidden="true">×</button>
-                        </div>
-                        <div className="modal-body">
-                            <div className="row">
-                                <div className="col-lg-12">
-                                    <form id="form-profile">
-                                        <div className="row">
-                                            <div className="col-md-4">
-                                                <div className="form-group text-center">
-                                                    <img className="img-fluid cursor-pointer rounded-circle col-md-8" id="img-avatar-edit" src="/@Model.Avatar" alt='img' onError={(currentTarget) => { currentTarget.onerror = null; currentTarget.src = '/images/default-avatar.jpg' }} />
-                                                </div>
-                                            </div>
-                                            <div className="col-md-8">
-                                                <div className="form-group mb-3 ">
-                                                    <label>Họ tên</label>
-                                                    <input type="text" value="@Model.FullName" readOnly className="form-control  bg-white" />
-                                                </div>
-                                                <div className="form-group mb-3">
-                                                    <label>Số điện thoại</label>
-                                                    <input type="text" className="form-control bg-white" readOnly value="@Model.Phone" />
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="row">
-                                            <div className="form-group  col-md-6">
-                                                <label>Email</label>
-                                                <input type="text" className="form-control bg-white" readOnly value="@Model.Email" />
-                                            </div>
-                                            <div className="form-group col-md-6">
-                                                <label>Chức vụ</label>
-                                                <input type="text" className="form-control bg-white" readOnly value="@Model.RoleName" />
-                                            </div>
-                                        </div>
 
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="modal-footer">
-                            <button type="button" className="btn btn-light m-w-100" data-dismiss="modal"><i className="mdi mdi-block-helper mr-1"></i>Đóng</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
         </>
     );

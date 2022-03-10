@@ -4,6 +4,8 @@ import { ArrowIcon,Example,Select } from "../../../components"
 import default_img from "../../../assets/images/default_image.png"
 import postApi from "../../../api/Post"
 import {removeUnicode,MakeUrl }from'../../../utils/utils'
+import { alertify } from "alertifyjs";
+import $ from 'jquery'
 
 
 function AddPost()
@@ -13,14 +15,7 @@ function AddPost()
         'title': 'Thông báo'
    });
 
-   $(function () {
-        $('#ipt-username, #ipt-password').on('keydown', function (e) {
-             if (e.keyCode === 13) {
-                  login();
-             }
-        })
-   })
-
+   
 
     // biến tạm 
     const categoryList ={'Tin tức':2, 'Khuyến mãi':3, 'Tư vấn':4, 'Tin tuyển dụng':5, 'Quy định và chính sách':6}

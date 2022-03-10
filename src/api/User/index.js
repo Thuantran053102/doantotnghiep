@@ -27,11 +27,11 @@ const userApi = {
         return axiosClient.patch(url)
     },
     update: (data) => {
-        const url = `/user/update-user/${data.id}`
+        const url = `/user/update-user/${data.userId}`
         return axiosClient.put(url, data)
     }, 
     resetPassword: (data) => {
-        const url = `/user/reset-password/${data.id}`
+        const url = `/user/reset-password/${data.userId}`
         return axiosClient.patch(url)
     }, 
     getRoles: () => {

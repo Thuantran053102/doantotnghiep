@@ -10,6 +10,7 @@ import Edit from './views/Post/edit';
 import './App.scss';
 import axiosClient from "./api/axiosClient"
 import AddPost from "./views/Post/add"
+import AddAccount from "./views/Account/Add/index";
 
 
 function App() {

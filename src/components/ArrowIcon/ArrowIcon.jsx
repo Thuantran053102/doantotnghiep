@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCaretDown,faCaretUp} from '@fortawesome/free-solid-svg-icons'
 
 import style from './ArrowIcon.scss'
-export default function Arrow(){
+function Arrow(){
     return(
         <>
             <span className="iconbrands" style={{position:"absolute",right:"10px", top:"50%", transform:"translateY(-50%)"}}>
@@ -12,3 +12,4 @@ export default function Arrow(){
         </>
         )
 }
+export default Arrow

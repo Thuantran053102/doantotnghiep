@@ -8,15 +8,16 @@ import Navbar from "./views/Navbar/index";
 import Post from "./views/Post"
 import Edit from './views/Post/edit';
 import './App.scss';
-
-
+import axiosClient from "./api/axiosClient"
+import AddPost from "./views/Post/add"
 
 
 function App() {
+  
   return (
    <>
    {/* <Navbar/> */}
-     <Edit/>
+     <Post/>
    </>
   );
 

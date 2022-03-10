@@ -13,7 +13,7 @@ export function FilterPost(APIPost,coppyArrayAPI,startInput,catevalue,dateValue)
     const ngaydang='ngaydang'
     let searchArray= Searchfilter(APIPost,startInput,tieude)
     let listArray= ListFilter(APIPost,catevalue,danhmuc)
-    let dateArray= DateFilter(APIPost,dateValue,ngaydang)
+    let dateArray= FilterDate(APIPost,dateValue,ngaydang)
     searchArray.map(function(item,index){
         listArray.map(function(item2,index){
             dateArray.map(function(item3,index){

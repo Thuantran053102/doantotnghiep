@@ -6,10 +6,12 @@ import App from "./App"
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
 import StoreProvider from './store'
+import Navbar from "./views/Navbar/index";
 
 ReactDOM.render(
     <React.StrictMode >
         <BrowserRouter >
+        <Navbar/>
             <App />
         </BrowserRouter>
     </React.StrictMode >,

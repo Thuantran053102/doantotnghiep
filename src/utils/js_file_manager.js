@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import { alertify } from "alertifyjs";
-import * as ultils from './ultils.js'
+import * as utils from './utils.js'
 var CALLBACKS = [];
 var CURRENT_KEY = "";
 function INIT_FILE_MANAGE(input, callBack) {
@@ -24,7 +24,7 @@ function INIT_FILE_MANAGE(input, callBack) {
                     alertify.error("Định dang không hợp lệ, vui lòng chọn lại")
                     return;
                 }
-                ultils.ajaxPost('folder/FileFromPath', files, function (res) {
+                utils.ajaxPost('folder/FileFromPath', files, function (res) {
                     if (res.IsSuccess) {
                         let callBackResult = CALLBACKS.find(n => n.name == CURRENT_KEY).callback;
                         callBackResult(res.Result)

@@ -5,11 +5,6 @@ function  Edit(){
 
     const [editorValue,setEditorValue]= useState('')
 
-    useEffect(()=>{
-		console.log('s',editorValue)
-		
-	},[editorValue])
-
     return(
         <>
             <div class="container-fluid">

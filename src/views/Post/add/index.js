@@ -4,8 +4,11 @@ import { ArrowIcon,Example,Select } from "../../../components"
 import default_img from "../../../assets/images/default_image.png"
 import postApi from "../../../api/Post"
 import {removeUnicode,MakeUrl }from'../../../utils/utils'
-import { alertify } from "alertifyjs";
+
+import  alertify from "alertifyjs";
 import $ from 'jquery'
+
+import jQuery from "jquery"
 
 
 function AddPost()
@@ -15,10 +18,9 @@ function AddPost()
         'title': 'Thông báo'
    });
 
-   
 
     // biến tạm 
-    const categoryList ={'Tin tức':2, 'Khuyến mãi':3, 'Tư vấn':4, 'Tin tuyển dụng':5, 'Quy định và chính sách':6}
+    const categoryList ={'Tin tức':1, 'Khuyến mãi':2, 'Tư vấn':3, 'Tin tuyển dụng':4, 'Quy định và chính sách':5}
     const statusList ={'Ẩn tin':0,'Hiện tin ngay':1}
     const imgFormat=['jpeg','gif','png','tiff','raw','psd','jpg']
   
@@ -30,8 +32,8 @@ function AddPost()
     const [pannerPath,setPannerPath]= useState('')
     const [linkValue,setLinkValue] = useState('')
     const [descriptionValue,setDescriptionValue]=useState('')
-    const [categoryValue,setCategoryValue] =useState('')
-    const [statusValue,setStatusValue]=useState('')
+    const [categoryValue,setCategoryValue] =useState(Object.keys(categoryList)[0])
+    const [statusValue,setStatusValue]=useState(Object.keys(statusList)[0])
     const [noteValue,setNoteValue] =useState('')
     const [editorValue,setEditorValue]= useState('')
 
@@ -89,7 +91,20 @@ function AddPost()
     useEffect(()=>{
         setIndexStatus(statusList[statusValue])
       },[statusValue])
-
+    
+    // reset values
+    const resetvalue=()=>{
+        setPannerPath('')
+        setTitleValue('')
+        setLinkValue('')
+        setDescriptionValue('')
+        setCategoryValue(Object.keys(categoryList)[0])
+        setStatusValue(Object.keys(categoryList)[0])
+        setNoteValue('')
+        setEditorValue('')
+        setImgPost('')
+    }
+    
     const createPost =async () => {
         try {
             const data = { "bannerPath": pannerPath,
@@ -106,10 +121,11 @@ function AddPost()
             console.log('aa',data);
             if (response.isSuccess) {
                 localStorage.setItem('user-token', JSON.stringify(response.data))
-                console.log('jjjjj',response)
+                alertify.alert('thêm bảng thành công')
+                resetvalue()
             }
             else {
-                alertify.alert('u')
+                alertify.alert('thêm bảng tin thất bại')
             }
 
         } catch (error) {
@@ -190,7 +206,7 @@ function AddPost()
                                                     <div class="form-group" >
                                                         <label>Danh mục <span class="text-danger">*</span></label>
                                                         <div style={{position:'relative'}}> 
-                                                            <input type="text" value={categoryValue} onChange={(e) => {setCategoryValue(e.target.value) }} name="CategoryId" id="slCategory" className="select2 form-control select2-multiple" placeholder="" />
+                                                            <input type="text" value={categoryValue}  name="CategoryId" id="slCategory" className="select2 form-control select2-multiple" placeholder="" />
                                                             <ArrowIcon />
                                                             <Select array={Object.keys(categoryList)} nameclass={['categoryList', 'inputList', 'ulList','overflow-hide']} state={[categoryValue,setCategoryValue]}/>
                                                         </div>
@@ -200,7 +216,7 @@ function AddPost()
                                                     <div class="form-group">
                                                         <label>Trạng thái <span class="text-danger">*</span></label>
                                                         <div style={{position:'relative'}}> 
-                                                            <input type="text" value={statusValue} onChange={(e) => { setStatusValue(e.target.value) }} name="CategoryId" id="slCategory" className="select2 form-control select2-multiple" placeholder="" />
+                                                            <input type="text" value={statusValue} name="CategoryId" id="slCategory" className="select2 form-control select2-multiple" placeholder="" />
                                                             <ArrowIcon />
                                                             <Select array={Object.keys(statusList)} nameclass={['categoryList', 'inputList', 'ulList','overflow-hide']} state={[statusValue,setStatusValue]} />
                                                         </div>

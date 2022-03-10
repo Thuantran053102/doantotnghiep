@@ -1,64 +1,33 @@
 import { useEffect, useRef, useState } from "react"
 import Style from "./Post.module.scss"
 import { removeUnicode, changerangedate, getTowDayAgo, getDay, changeday } from '../../utils/utils'
-import { FilterPost } from "../../utils/filterPost"
-// import { getDateRangeValue } from "../../utils/utils"
-import Select from "../../components/Select/Select"
+// import { FilterPost } from "../../utils/filterPost"
+
+import {Select,Buttom} from '../../components/'
 import DateRangePicker from 'rsuite/DateRangePicker';
 import { startOfDay, endOfDay, addDays, subDays } from 'date-fns';
 import 'rsuite/dist/rsuite-rtl.min.css'
 import clsx from "clsx"
-// import { data } from "jquery"
-// import { Modal } from "bootstrap"
 import { Link } from "react-router-dom"
 import { actions } from "../../utils"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faXmark } from '@fortawesome/free-solid-svg-icons'
-import Buttom from "../../components/Buttom"
-
-var APIPost = [
-    {
-        danhmuc: 'tin tức',
-        tieude: 'cuộc sống này vốn bất lươn nên cuộc đời ta bất ổn ',
-        nguouoisoan: 'trần văn thuận',
-        ngaydang: '28/02/2022',
-        trangthai: 'hiện'
-    },
-    {
-        danhmuc: 'Khuyến mãi',
-        tieude: 'bạn ơi đừng nghiện nữa đời mình còn gì đâu',
-        nguouoisoan: 'trần văn thuận',
-        ngaydang: '28/02/2022',
-        trangthai: 'hiện'
-    },
-    {
-        danhmuc: 'tư vấn',
-        tieude: 'cuộc sống này vốn bất lươn nên cuộc đời ta bất ổn ',
-        nguouoisoan: 'nguyễn hoàn sang',
-        ngaydang: '28/02/2022',
-        trangthai: 'ẩn'
-    },
-    {
-        danhmuc: 'tin tức',
-        tieude: 'cuộc sống mà đầy nổi đâu',
-        nguouoisoan: 'trần văn thuận',
-        ngaydang: '',
-        trangthai: 'hiện'
-    }
-]
+import postApi from "../../api/Post";
+import jQuery from "jquery"
 
 
 function Post() {
+   
     //get datenow
     var today = new Date();
     var datea = today.getDate() + '/' + (today.getMonth() + 1) + '/' + today.getFullYear();
 
     // list chọn
-    const categoryList = ['Tất cả', 'Tin tức', 'Khuyến mãi', 'Tư vấn', 'Tin tuyển dụng', 'Quy định và chính sách']
+    const categoryList = {'Tất cả':0, 'Tin tức':1, 'Khuyến mãi':2, 'Tư vấn':3, 'Tin tuyển dụng':4, 'Quy định và chính sách':5}
 
     // biến trung gian
     const presently = 'Ẩn', unPresently = 'Hiện'
-    // let arraySearch=[]
+    
 
 
     const textMutedRef = useRef()
@@ -69,25 +38,44 @@ function Post() {
 
     // const [arrPortSearch,setArrPortSearch] =useState([...APIPost])
     // const [arrcate,setArrcate] =useState([...APIPost])
-    const [arrayPost, setArrayPost] = useState([...APIPost])
+    const statusList={0:'Ẩn',1:'Hiện'}
 
+
+    const [arrayPost, setArrayPost] = useState([   {
+            "id": 1,
+            "title": "",
+            "status": 1,
+            "createdDate": "",
+            "userCreate": "",
+            "category": ""
+    }])
     const [testSearchValue, setTestSearchValue] = useState('')
-    const [categoryValue, setCategoryValue] = useState(categoryList[0])
-    const [dateValue, setDateValue] = useState(datea + ' - ' + datea)
-
-    // useEffect
+    const [categoryValue, setCategoryValue] = useState(Object.keys(categoryList)[0])
+    // const [dateValue, setDateValue] = useState(datea + ' - ' + datea)
+    const [numberPosts,setNumberPosts] =useState(20)
+    const [APIPost,setAPIPost] = useState([])
+    const [deletedPost,setDeletedPost]=useState(false)
+    console.log('deletedPost',deletedPost)
+    // get_posts API
+    
     useEffect(() => {
-        setDateValue(document.getElementsByClassName('rs-picker-toggle-textbox')[0].value)
-        FilterPost(APIPost, [arrayPost, setArrayPost], testSearchValue, categoryValue, dateValue)
-    }, [dateValue])
+        const getAllUsers = async () => {
+            try {
+                const params = {
+                    keyword: testSearchValue,
+                    categoryid: categoryList[categoryValue],
+                    numberItem: numberPosts,
+                };
+                const response = await postApi.getAll(params);
+                setArrayPost(response.data)
 
-    useEffect(() => {
-        FilterPost(APIPost, [arrayPost, setArrayPost], testSearchValue, categoryValue, dateValue)
-    }, [testSearchValue])
-
-
-
-
+            }
+            catch (e) {
+                console.error(e)
+            }
+        }
+        getAllUsers()
+    }, [testSearchValue, categoryValue,numberPosts, deletedPost])
 
     // daterangpicker 
     const {
@@ -121,6 +109,7 @@ function Post() {
             value: [startOfDay(subDays(new Date(), 364)), endOfDay(new Date())]
         },
     ];
+
     const Label = props => {
         return <label style={{ display: 'block', marginTop: 10 }} {...props} />;
     };
@@ -142,14 +131,29 @@ function Post() {
             console.log(btnAgree[0])
         }
     }
+
     const deletePost = (id) => {
         showRef.current.classList.add(Style.show)
         const content = showRef.current.getElementsByClassName(Style.description)
         content[0].innerText = 'bạn có chắc muốn xóa mục này'
         // click nút đồng ý 
         const btnAgree = showRef.current.getElementsByClassName('btn_pri')
-        btnAgree[0].onclick = function () {
-            console.log(btnAgree[0])
+        btnAgree[0].onclick = async ()=>{
+            try {
+                const response = await postApi.delete(id);
+                if (response.isSuccess) {
+                    localStorage.setItem('user-token', JSON.stringify(response.valueid))
+                    actions.closeModal({ myref: showRef, myclass: Style.show }) 
+                    setDeletedPost(!deletedPost)
+                    alertify.alert('Xóa thành công')
+                }
+                else {
+                    alertify.alert('xóa thất bại')
+                }
+            }
+            catch (e) {
+                console.error(e)
+            }
         }
     }
     return (
@@ -185,12 +189,12 @@ function Post() {
                                             <h5 className="text-primary">Danh mục</h5>
                                             <div className="form-group" style={{ position: "relative" }}>
                                                 <input type="text" className="form-control " value={categoryValue} style={{ textAlign: 'start' }} />
-                                                <Select array={categoryList} nameclass={['overflow-hide', 'zindex-post']} state={[categoryValue, setCategoryValue]} />
+                                                <Select array={Object.keys(categoryList)} nameclass={['overflow-hide', 'zindex-post']} state={[categoryValue, setCategoryValue]} />
                                             </div>
                                         </div>
                                     </div>
                                     <hr />
-                                    <div className="mt-2">
+                                    {/* <div className="mt-2">
                                         <h5 className="text-primary">Ngày đăng</h5>
                                         <div class="form-group" style={{ position: 'relative' }}>
 
@@ -207,12 +211,12 @@ function Post() {
                                             >
                                             </DateRangePicker>
                                         </div>
-                                    </div>
-                                    <hr />
+                                    </div> */}
+                                    {/* <hr /> */}
                                     <div className="mt-2">
                                         <h5 className="text-primary">Số bài viết</h5>
                                         <div className="form-group">
-                                            <select id="sel-record-search" className="form-control" data-toggle="select-no-search">
+                                            <select id="sel-record-search" className="form-control" onChange={e=>{setNumberPosts(e.target.value)} }data-toggle="select-no-search">
                                                 <option value="20">20 bài viết</option>
                                                 <option value="30">30 bài viết</option>
                                                 <option value="50">50 bài viết</option>
@@ -248,25 +252,26 @@ function Post() {
                                                     </td>
                                                 </tr>
                                                 {
-
-
                                                     arrayPost.map(function (item, index) {
-                                                        const trangthai = (removeUnicode(item.trangthai) === removeUnicode(unPresently)) ? presently : unPresently
+                                                        const trangthai = (removeUnicode(statusList[item.status]) === removeUnicode(unPresently)) ? presently : unPresently
                                                         return (
                                                             <tr key={index}>
                                                                 <td className="text-center">{index}</td>
-                                                                <td>{item.danhmuc}</td>
-                                                                <td>{item.tieude}</td>
-                                                                <td>{item.nguouoisoan}</td>
-                                                                <td>{item.ngaydang}</td>
-                                                                <td><span className="badge badge-success-lighten">{item.trangthai}</span></td>
+                                                                <td>{item.category}</td>
+                                                                <td>{item.title}</td>
+                                                                <td>{item.userCreate}</td>
+                                                                <td>{item.createdDate}</td>
+                                                                <td>
+                                                                    <span className={clsx('badge', item.status === 1 ? 'badge-success-lighten' : 'badge-danger-lighten')}>{(item.status == 1 ? unPresently : presently )}</span>
+                                            
+                                                                </td>
                                                                 <td className="text-center px-w-50" >
                                                                     <div className={clsx(Style.dropdown, "dropdown")} style={{ top: '0' }}>
                                                                         <a className="dropdown-toggle text-muted arrow-none cursor-pointer" data-toggle="dropdown"><i className="mdi mdi-dots-vertical font-18 text-primary" ></i></a>
                                                                         <div className={clsx(Style.dropdown_menu, 'dropdown-menu dropdown-menu-right')} ref={downMenuRef}>
                                                                             <a href="/nhung-ly-do-ban-nen-ve-sinh-may-lanh-thuong-xuyen" target="_blank" className="a-detail dropdown-item cursor-pointer"><i className="mdi mdi-window-restore mr-1"></i>Xem chi tiết</a>
                                                                             <a href="/admin/post/edit/69" className="a-detail dropdown-item cursor-pointer"><i className="mdi mdi-export mr-1"></i>Cập nhật tin tức</a>
-                                                                            <a onClick={() => { lookTypePost(item.id, item.trangthai) }} className="a-delete dropdown-item cursor-pointer"> <i className="mdi mdi-content-save-settings mr-1"></i>{trangthai} bài viết</a>
+                                                                            <a onClick={() => { lookTypePost(item.id,statusList[item.status]) }} className="a-delete dropdown-item cursor-pointer"> <i className="mdi mdi-content-save-settings mr-1"></i>{trangthai} bài viết</a>
                                                                             <a onClick={() => { deletePost(item.id) }} className="a-delete dropdown-item cursor-pointer"><i className="mdi mdi-trash-can-outline mr-1"></i>Xóa tin</a>
                                                                         </div>
                                                                     </div>

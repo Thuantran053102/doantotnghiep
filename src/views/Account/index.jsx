@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 import clsx from "clsx"
 import Dropdown from 'react-bootstrap/Dropdown'
 import EditAccount from "./Edit/index";
-import Select from 'react-select'
+// import Select from 'react-select'
 import { Table } from 'react-bootstrap';
 import AddAccount from "./Add/index";
 import ResetPassword from "./ResetPassword/index";

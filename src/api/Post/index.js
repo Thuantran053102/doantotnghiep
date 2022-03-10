@@ -1,11 +1,12 @@
 import axiosClient from "../axiosClient";
 
+const token='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjb25ndGhhbmhzdG9yZW5vaWNodXllbmJhbmNhY3RoaWV0YmlkaWVudHUiLCJqdGkiOiIyYzZlZTk5MC1mOTRlLTRiNmYtYTNmMi02NmM2YmZhODAyMzEiLCJpYXQiOiIzLzEwLzIwMjIgNzowNjoxNiBBTSIsIlVzZXJJZCI6IjIiLCJVc2VyTmFtZSI6ImFkbWluMSIsIkVtYWlsIjoic3RyaW5nIiwiQXZhdGFyIjoic3RyaW5nIiwiUGhvbmVOdW1iZXIiOiJzdHJpbmciLCJleHAiOjE2NDY5ODIzNzYsImlzcyI6Iklzc3VlciIsImF1ZCI6IkF1ZGllbmNlIn0.xkkJb2Uy13cRULx58V5sZC9l5fX7LdNWSchfV0D4jKs'
 const postApi = {
     add: (data) => {
         const url = '/Post/add-post'
         return axiosClient.post(url, data, {
             headers: {
-                'Authorization': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjb25ndGhhbmhzdG9yZW5vaWNodXllbmJhbmNhY3RoaWV0YmlkaWVudHUiLCJqdGkiOiJhYTRiYjhkNi1mNzZiLTQyMWUtODk2Zi1hZDc5MjgyODM4ZTEiLCJpYXQiOiIzLzEwLzIwMjIgMjowNzowOSBBTSIsIlVzZXJJZCI6IjIiLCJVc2VyTmFtZSI6ImFkbWluMSIsIkVtYWlsIjoiYWRtaW4xQGdtYWlsLmNvbSIsIkF2YXRhciI6InN0cmluZyIsIlBob25lTnVtYmVyIjoiMDkwOTExMjIzMyIsImV4cCI6MTY0Njk2NDQyOSwiaXNzIjoiSXNzdWVyIiwiYXVkIjoiQXVkaWVuY2UifQ.vttWtH1iI39mO7wWsCwlMG5vQNfmwD_YPOw9-l5vHug'
+                'Authorization': token
             }
         })
     },
@@ -14,6 +15,23 @@ const postApi = {
         return axiosClient.post(url, data, {
             headers:{ 'Content-Type': 'multipart/form-data'}
         })
+    },
+    getAll(params) {
+        const url = '/Post/get-posts'
+        // return axiosClient.get(url)
+        return axiosClient.get(url, {params: params},{
+            headers: {
+                'Authorization': token
+            }
+        })
+    },
+    get: (id) => {
+        const url = `/user/get-user/${id}`
+        return axiosClient.get(url)
+    }, 
+    delete:(id)=>{
+        const url= `/Post/delete-post/${id}`
+        return axiosClient.delete(url)
     }
 
 }

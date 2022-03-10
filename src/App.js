@@ -17,8 +17,7 @@ function App() {
   return (
    <>
    {/* <Navbar/> */}
-  <Account/>
-
+    <AddPost/>
    </>
   );
 

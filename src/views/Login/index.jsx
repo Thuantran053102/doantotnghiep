@@ -37,7 +37,7 @@ function Login(props) {
           try {
                const data = { userName, password }
                const response = await userApi.login(data);
-               console.log(response);
+               // console.log(response);
                if (response.isSuccess) {
                     localStorage.setItem('user-token', JSON.stringify(response.data))
                     navigate('/admin/dashboard')
@@ -47,7 +47,7 @@ function Login(props) {
                }
 
           } catch (error) {
-               console.log(error);
+               console.error(error);
           }
      }
 

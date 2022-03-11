@@ -1,4 +1,5 @@
 
+import * as callApi from './customHook'
 export * as actions from './closeModal'
 export * as filter from'./filterPost'
 export * as filterDate from './filterDate'

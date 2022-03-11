@@ -3,65 +3,70 @@ import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap/Modal'
 import { useState, useEffect } from "react";
 import userApi from '../../../api/User'
-
+import { memo } from 'react'
+import alertify from "alertifyjs";
 EditAccount.propTypes = {
 
 };
 
 function EditAccount(props) {
-    const { show, infoUser, setModalEditFalse } = props;
-    // console.log('modal:', infoUser)
-    const [roleValue, setRoleValue] = useState('0');
+    const { show, infoUser, setModalFalse, reloadTable } = props;
+    const [roleValue, setRoleValue] = useState();
     const [roleSelect, setRoleSelect] = useState([])
-    const [userData, setUserData] = useState({
-        fullName: '',
-        userName: '',
-        email: '',
-        phoneNumber: '',
-        role: '',
-        avatar: '',
-        userId: '',
-    })
+    const [userData, setUserData] = useState(
+        {
+            userId: "",
+            fullName: "",
+            userName: "",
+            phoneNumber: "",
+            avatar: '',
+            role: '',
+            email: ''
+        }
+    )
+    const [showModal, setShowModal] = useState(show)
 
     useEffect(() => {
-        const getAllUsers = async () => {
+        const getRoles = async () => {
             try {
                 const responseRole = await userApi.getRoles()
                 setRoleSelect(responseRole.data)
-                // console.log(roleSelect)
             }
             catch (e) {
                 console.error(e)
             }
         }
-        getAllUsers()
+        getRoles()
         setUserData(infoUser)
-
+        // setRoleValue(infoUser.role)
     }, [infoUser])
-
-    // console.log('userdata:', userData)
-
-    const [showModal, setShowModal] = useState(show)
 
     // Hiển thị Modal
     useEffect(() => {
         setShowModal(show)
     }, [show])
+    // console.log('user-data', userData)
+    console.log('user-data', userData)
+    function handleUpdateUser() {
+        console.log('update user');
+        (
+            async function () {
+                try {
+                    const response = await userApi.update(userData)
+                    if (response.isSuccess) {
+                        alertify.success("Cập nhật thành công")
+                        reloadTable()
+                    } else {
+                        alertify.error("Cập nhật thất bại")
+                    }
+                } catch (err) {
+                    console.error(err)
+                }
+            }
+        )()
+    }
 
-    // Gọi API lấy dữ liệu user
-    // useEffect(() => {
-    //     const getInfoUser = async () => {
-    //         try {
-    //             const response = await userApi.get(userId)
-    //             setInfoUser(response.data)
-    //             console.log(response.data)
-    //         }
-    //         catch (e) {
-    //             console.error(e)
-    //         }
-    //     }
-    //     getInfoUser()
-    // }, [userId])
+
     return (
         <Modal
             show={showModal}
@@ -104,11 +109,10 @@ function EditAccount(props) {
                                 <div className="form-group col-md-6">
                                     <label>Chức vụ <span className="text-danger">*</span></label>
                                     {/* <Select array={['Tất cả', 'Admin', 'Intem']} nameclass={['select2 form-control']} state={[unit, setUnit]} />/> */}
-                                    <select className="form-control " id="sl-role" onChange={(e) => setRoleValue(e.target.value)} value={roleValue}>
-                                        <option value='0'> Tất cả </option>
+                                    <select className="form-control " id="sl-role" value={userData.role || ''} onChange={(e) => setUserData({ ...userData, role: e.target.value })} >
                                         {
                                             roleSelect.map((item, index) => (
-                                                <option key={index} value={item.id}>{item.name}</option>
+                                                <option key={index} value={item.name}>{item.name}</option>
                                             ))
                                         }
                                     </select>
@@ -126,15 +130,18 @@ function EditAccount(props) {
             </Modal.Body>
             <Modal.Footer>
                 <button id="btn-delete" type="button" className="btn btn-danger m-w-100 mr-auto ml-1"><i className="mdi mdi-trash-can mr-1"></i>Xoá</button>
+                <button id="btn-edit-branch" type="submit" className="btn btn-primary ml-1" onClick={() => {
+                    handleUpdateUser(userData);
+                    setModalFalse(false)
+                }}>
+                    <i className="mdi mdi-check mr-1" ></i>Cập nhật
+                </button>
                 <button type="button" className="btn btn-light m-w-100" data-dismiss="modal" onClick={() => {
-                    setShowModal(false);
-                    setModalEditFalse();
+                    setModalFalse();
                 }}><i className="mdi mdi-block-helper mr-1"></i>Đóng</button>
-                <button id="btn-edit-branch" type="submit" className="btn btn-primary ml-1"><i className="mdi mdi-check mr-1"></i>Cập nhật</button>
             </Modal.Footer>
         </Modal >
 
     );
 }
-// onClick={(e) => handleModalEditSubmit(e)}
 export default EditAccount;

@@ -4,6 +4,8 @@ import { ArrowIcon,Example,Select } from "../../../components"
 import default_img from "../../../assets/images/default_image.png"
 import postApi from "../../../api/Post"
 import {removeUnicode,MakeUrl }from'../../../utils/utils'
+
+import  alertify from "alertifyjs";
 import jQuery from "jquery"
 
 
@@ -13,7 +15,6 @@ function AddPost()
         'label': '<i class="mdi mdi-check mr-1"></i>Xác nhận',
         'title': 'Thông báo'
    });
-
     // biến tạm 
     const categoryList ={'Tin tức':1, 'Khuyến mãi':2, 'Tư vấn':3, 'Tin tuyển dụng':4, 'Quy định và chính sách':5}
     const statusList ={'Ẩn tin':0,'Hiện tin ngay':1}

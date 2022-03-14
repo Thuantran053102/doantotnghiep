@@ -6,8 +6,6 @@ import postApi from "../../../api/Post"
 import {removeUnicode,MakeUrl }from'../../../utils/utils'
 
 import  alertify from "alertifyjs";
-import $ from 'jquery'
-
 import jQuery from "jquery"
 
 
@@ -17,8 +15,6 @@ function AddPost()
         'label': '<i class="mdi mdi-check mr-1"></i>Xác nhận',
         'title': 'Thông báo'
    });
-
-
     // biến tạm 
     const categoryList ={'Tin tức':1, 'Khuyến mãi':2, 'Tư vấn':3, 'Tin tuyển dụng':4, 'Quy định và chính sách':5}
     const statusList ={'Ẩn tin':0,'Hiện tin ngay':1}
@@ -38,7 +34,7 @@ function AddPost()
     const [editorValue,setEditorValue]= useState('')
 
     // // index
-    const [indexCategory,setIndexCategory]= useState(2)
+    const [indexCategory,setIndexCategory]= useState(1)
     const [indexStatus,setIndexStatus]= useState(0)
 
 
@@ -99,35 +95,40 @@ function AddPost()
         setLinkValue('')
         setDescriptionValue('')
         setCategoryValue(Object.keys(categoryList)[0])
-        setStatusValue(Object.keys(categoryList)[0])
+        setStatusValue(Object.keys(statusList)[0])
         setNoteValue('')
         setEditorValue('')
         setImgPost('')
     }
+
     
     const createPost =async () => {
         try {
-            const data = { "bannerPath": pannerPath,
+            const data = { 
+        
+                "bannerPath": pannerPath,
                             "title": titleValue,
                             "friendlyUrl": linkValue,
-                            "shortDescription": descriptionValue,
+                            "subTitle": descriptionValue,
                             "categoryId": indexCategory,
                             "status": indexStatus,
                             "note": noteValue,
                             "content": editorValue,
                             "thumbNailImage": "string"
                                 }
-            const response = await postApi.add(data);
-            console.log('aa',data);
-            if (response.isSuccess) {
-                localStorage.setItem('user-token', JSON.stringify(response.data))
-                alertify.alert('thêm bảng thành công')
-                resetvalue()
-            }
-            else {
-                alertify.alert('thêm bảng tin thất bại')
-            }
-
+            setTimeout(async ()=>{
+                const response = await postApi.add(data);
+                console.log(response.data)
+                if (response.isSuccess) {
+                    localStorage.setItem('user-token', JSON.stringify(response.data))
+                    alertify.alert('thêm bảng thành công')
+                    resetvalue()
+                }
+                else {
+                    alertify.alert('thêm bảng tin thất bại')
+                }
+            },10000)
+            
         } catch (error) {
             console.log(error);
         }
@@ -149,10 +150,6 @@ function AddPost()
                     <div class="card sticky-top">
                         <div class="card-body">
                                 <img src="/images/logo-icon-trans.png" height="16" width="16" />
-                               
-                                {/* <span id="preview-url"></span>
-                                <h3 class="font-weight-normal font-20"><a href="#" id="preview-title"></a></h3> 
-                                <p id="preview-desc"></p> */}
                         </div>
                     </div>
                     </div>
@@ -172,7 +169,6 @@ function AddPost()
                                                         <span style={{ position: "absolute", width: "100%", left: "0", right: "0" }}>Chọn hình đại điện</span>
                                                         <input type="file" onChange={handlePreviewAvatar} style={{ opacity: "0", width: '100%', height: "100%", cursor: "pointer" }} />
                                                     </button>
-                                                    {/* <button id="btn-banner" type="button" class="btn btn-primary btn-sm float-right"><i class="mdi mdi-plus-circle font-16 mr-1"></i>Thêm hình ảnh</button> */}
                                                 </div>
                                             </div>
                                         </div>

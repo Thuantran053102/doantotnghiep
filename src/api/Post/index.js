@@ -1,6 +1,8 @@
 import axiosClient from "../axiosClient";
 
-const token='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjb25ndGhhbmhzdG9yZW5vaWNodXllbmJhbmNhY3RoaWV0YmlkaWVudHUiLCJqdGkiOiJhOWVjMTkyMS0yNDhiLTRlOTEtYTk1NS00NWYxMGRlMjNiZjciLCJpYXQiOiIzLzE0LzIwMjIgMjoxNDoyMCBBTSIsIlVzZXJJZCI6IjMiLCJVc2VyTmFtZSI6ImFkbWluMyIsIkVtYWlsIjoic3RyaW5nIiwiQXZhdGFyIjoic3RyaW5nIiwiUGhvbmVOdW1iZXIiOiJzdHJpbmciLCJleHAiOjE2NDczMTA0NjAsImlzcyI6Iklzc3VlciIsImF1ZCI6IkF1ZGllbmNlIn0.QJIS4SDpxkpV5j3vxLs4HLUtrI5qde5bNcbS-CokH5c'
+
+const token='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjb25ndGhhbmhzdG9yZW5vaWNodXllbmJhbmNhY3RoaWV0YmlkaWVudHUiLCJqdGkiOiIwMjgyOWY0Ny1iMjNkLTQ2ODktYTY3OC0yNjczNWM0NmYxMDUiLCJpYXQiOiIzLzE0LzIwMjIgNzoxNjo0MyBBTSIsIlVzZXJJZCI6IjU4IiwiVXNlck5hbWUiOiJhZG1pbjEiLCJFbWFpbCI6InN0cmluZyIsIkF2YXRhciI6InN0cmluZyIsIlBob25lTnVtYmVyIjoic3RyaW5nIiwiZXhwIjoxNjQ3MzI4NjAzLCJpc3MiOiJJc3N1ZXIiLCJhdWQiOiJBdWRpZW5jZSJ9.xnqZQ8AQoqEf1pBKnb5igZM1g9oiS7LJp7V_GzMUT-U'
+
 const postApi = {
     add: (data) => {
         const url = '/Api/Post/add-post'
@@ -29,8 +31,16 @@ const postApi = {
         return axiosClient.get(url)
     },
     update: (data) => {
-        const url = `/api/Post/update-post/${data.id}`
-        return axiosClient.put(url, data)
+
+        console.log('fect:'+ data.content)
+        const url = `/api/Post/update-post/${data.postId}`
+        delete data.postId
+        return axiosClient.put(url, data ,{
+            headers: {
+                'Authorization': token
+            }
+        })
+
     }, 
     delete:(id)=>{
         const url= `/Post/delete-post/${id}`

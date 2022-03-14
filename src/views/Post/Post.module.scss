@@ -91,3 +91,7 @@
     top: -10px;
 
 }
+.box ul::-webkit-scrollbar { 
+    width: 0 !important;
+    display: none; 
+  }

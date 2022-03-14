@@ -11,16 +11,13 @@ import './App.scss';
 import axiosClient from "./api/axiosClient"
 import AddPost from "./views/Post/add"
 import AddAccount from "./views/Account/Add/index";
-
+import * as $ from "jquery" 
+require('bootstrap');
 
 function App() {
-  
-  return (
-   <>
-    <Post/>
-   </>
-  );
-
+    return (
+      <Addproduct/>
+    );
 }
 
 export default App;

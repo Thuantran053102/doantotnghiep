@@ -2,22 +2,23 @@ import { useEffect, useRef, useState } from "react"
 import Style from "./Post.module.scss"
 import { removeUnicode, changerangedate, getTowDayAgo, getDay, changeday } from '../../utils/utils'
 // import { FilterPost } from "../../utils/filterPost"
+import { Route, Routes, Link ,useNavigate} from 'react-router-dom';
 
 import {Select,Buttom} from '../../components/'
 import DateRangePicker from 'rsuite/DateRangePicker';
 import { startOfDay, endOfDay, addDays, subDays } from 'date-fns';
 import 'rsuite/dist/rsuite-rtl.min.css'
 import clsx from "clsx"
-import { Link } from "react-router-dom"
 import { actions } from "../../utils"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faXmark } from '@fortawesome/free-solid-svg-icons'
 import postApi from "../../api/Post";
+import Edit from "./edit"
 import jQuery from "jquery"
 
 
 function Post() {
-   
+    let navigate = useNavigate();
     //get datenow
     var today = new Date();
     var datea = today.getDate() + '/' + (today.getMonth() + 1) + '/' + today.getFullYear();
@@ -39,6 +40,7 @@ function Post() {
     // const [arrPortSearch,setArrPortSearch] =useState([...APIPost])
     // const [arrcate,setArrcate] =useState([...APIPost])
     const statusList={0:'Ẩn',1:'Hiện'}
+    let idItem=0
 
 
     const [arrayPost, setArrayPost] = useState([   {
@@ -128,7 +130,8 @@ function Post() {
         // click nút đồng ý 
         const btnAgree = showRef.current.getElementsByClassName('btn_pri')
         btnAgree[0].onclick = function () {
-            console.log(btnAgree[0])
+            const statusNow= (removeUnicode(trangthai)=== removeUnicode(presently)? 1:0 )
+            console.log(btnAgree[0],id,statusNow)
         }
     }
 
@@ -253,6 +256,7 @@ function Post() {
                                                 </tr>
                                                 {
                                                     arrayPost.map(function (item, index) {
+                                                        idItem=item.id
                                                         const trangthai = (removeUnicode(statusList[item.status]) === removeUnicode(unPresently)) ? presently : unPresently
                                                         return (
                                                             <tr key={index}>
@@ -270,7 +274,7 @@ function Post() {
                                                                         <a className="dropdown-toggle text-muted arrow-none cursor-pointer" data-toggle="dropdown"><i className="mdi mdi-dots-vertical font-18 text-primary" ></i></a>
                                                                         <div className={clsx(Style.dropdown_menu, 'dropdown-menu dropdown-menu-right')} ref={downMenuRef}>
                                                                             <a href="/nhung-ly-do-ban-nen-ve-sinh-may-lanh-thuong-xuyen" target="_blank" className="a-detail dropdown-item cursor-pointer"><i className="mdi mdi-window-restore mr-1"></i>Xem chi tiết</a>
-                                                                            <a href="/admin/post/edit/69" className="a-detail dropdown-item cursor-pointer"><i className="mdi mdi-export mr-1"></i>Cập nhật tin tức</a>
+                                                                            <Link onClick={console.log(1)}  to={`/admin/post/edit/${item.id}`} className="a-detail dropdown-item cursor-pointer"><i className="mdi mdi-export mr-1"></i>Cập nhật tin tức</Link>
                                                                             <a onClick={() => { lookTypePost(item.id,statusList[item.status]) }} className="a-delete dropdown-item cursor-pointer"> <i className="mdi mdi-content-save-settings mr-1"></i>{trangthai} bài viết</a>
                                                                             <a onClick={() => { deletePost(item.id) }} className="a-delete dropdown-item cursor-pointer"><i className="mdi mdi-trash-can-outline mr-1"></i>Xóa tin</a>
                                                                         </div>
@@ -321,10 +325,12 @@ function Post() {
                     </div>
                 </div>
 
-
-
             </div>
+            <Routes>
+                <Route path={`/admin/post/edit/:id`} element={<Edit/>}></Route>
+            </Routes>
         </>
     )
 }
+
 export default Post

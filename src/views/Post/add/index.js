@@ -100,28 +100,35 @@ function AddPost()
         setEditorValue('')
         setImgPost('')
     }
+
     
     const createPost =async () => {
         try {
-            const data = { "bannerPath": pannerPath,
+            const data = { 
+        
+                "bannerPath": pannerPath,
                             "title": titleValue,
                             "friendlyUrl": linkValue,
-                            "shortDescription": descriptionValue,
+                            "subTitle": descriptionValue,
                             "categoryId": indexCategory,
                             "status": indexStatus,
                             "note": noteValue,
                             "content": editorValue,
                             "thumbNailImage": "string"
                                 }
-            const response = await postApi.add(data);
-            if (response.isSuccess) {
-                localStorage.setItem('user-token', JSON.stringify(response.data))
-                alertify.alert('thêm bảng thành công')
-                resetvalue()
-            }
-            else {
-                alertify.alert('thêm bảng tin thất bại')
-            }
+            setTimeout(async ()=>{
+                const response = await postApi.add(data);
+                console.log(response.data)
+                if (response.isSuccess) {
+                    localStorage.setItem('user-token', JSON.stringify(response.data))
+                    alertify.alert('thêm bảng thành công')
+                    resetvalue()
+                }
+                else {
+                    alertify.alert('thêm bảng tin thất bại')
+                }
+            },10000)
+            
         } catch (error) {
             console.log(error);
         }

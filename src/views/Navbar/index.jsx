@@ -5,6 +5,7 @@ import './Navbar.scss'
 import Dashboard from "./../Dashboard/index";
 import Product from "./../Product/index";
 import Customer from "./../Customer/index";
+import Edit from '../Post/edit';
 
 
 function Navbar() {
@@ -93,6 +94,7 @@ function Navbar() {
                 <Route path='/admin/dashboard' element={<Dashboard />}></Route>
                 <Route path='/admin/product' element={<Product />}></Route>
                 <Route path='/admin/customer' element={<Customer />}></Route>
+                <Route path={`/admin/post/edit/96`} element={<Edit/>}></Route>
             </Routes>
         </>
     )

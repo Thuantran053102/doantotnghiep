@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import alertify from "alertifyjs";
-import $ from 'jquery';
+import * as $ from 'jquery'
 import * as utils from '../../utils/utils.js';
 import { Alert } from 'bootstrap';
 import { useEffect, useState } from "react";
@@ -15,16 +15,32 @@ import { Table } from 'react-bootstrap';
 import AddAccount from "./Add/index";
 import ResetPassword from "./ResetPassword/index";
 import useFetch from '../../utils/customHook.js';
+import Image from 'react-bootstrap/Image';
+
+// import { CKEditor } from '@ckeditor/ckeditor5-react';
+// import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 Account.propTypes = {
 
 };
 
 function Account(props) {
+    // window['jQuery'] = window['$'] = $;
+
+
 
     const [countReload, setCountReload] = useState(0);
 
     // Danh sách account
-    const [accountList, setAccountList] = useState([]);
+    const [accountList, setAccountList] = useState([
+        // {
+        //     fullName: 'Họ và tên',
+        //     userName: 'Tên tài khoản',
+        //     phoneNumber: '0909-xxx-xxx',
+        //     avatar: 'avatar',
+        //     role: 'Admin',
+        //     email: 'email@gmail.com'
+        // }
+    ]);
 
     // Input
     const [inputValue, setInputValue] = useState('');
@@ -42,10 +58,23 @@ function Account(props) {
 
     // Id user
     const [infoUser, setInfoUser] = useState({})
-    // console.log('infouser first:', infoUser)
+    const [userId, setUserId] = useState()
 
     // Dữ liệu của select
     const [roleSelect, setRoleSelect] = useState([])
+
+    useEffect(() => {
+        const getRoles = async () => {
+            try {
+                const responseRole = await userApi.getRoles()
+                setRoleSelect(responseRole.data)
+            }
+            catch (e) {
+                console.error(e)
+            }
+        }
+        getRoles()
+    }, [])
 
     useEffect(() => {
         const getAllUsers = async () => {
@@ -56,9 +85,10 @@ function Account(props) {
                     statusId: statusValue,
                 };
                 const response = await userApi.getAll(params);
-                const responseRole = await userApi.getRoles()
-                setAccountList(response.data)
-                setRoleSelect(responseRole.data)
+                if (response.isSuccess) {
+                    setAccountList(response.data)
+                }
+                // console.log(accountList)
             }
             catch (e) {
                 console.error(e)
@@ -67,8 +97,8 @@ function Account(props) {
         getAllUsers()
     }, [inputValue, roleValue, statusValue, countReload])
 
+    // Reload ttable account
     function reloadTable() {
-        console.log('reload')
         let number = countReload
         number++;
         setCountReload(number)
@@ -77,127 +107,6 @@ function Account(props) {
         setStatusValue('0')
     }
 
-
-    const $imgAvatarAdd = $("#img-avatar-add");
-    const $imgAvatarEdit = $("#img-avatar-edit");
-    const $formEdit = $("#form-edit");
-
-
-
-
-
-    var CURRENT_IMG_PATH = "";
-    var CURRENT_USER_ID = 0;
-    /*Binding file add */
-    // INIT_FILE_MANAGE("#img-avatar-add", function (res) {
-    //     CURRENT_IMG_PATH = res.ThumbNailPath;
-    //     $("#img-avatar-add").attr('src', "/" + res.ThumbNailPath)
-    // })
-    // /*Binding file edit  */
-    // INIT_FILE_MANAGE("#img-avatar-edit", function (res) {
-    //     CURRENT_IMG_PATH = res.ThumbNailPath;
-    //     $("#img-avatar-edit").attr('src', "/" + res.ThumbNailPath)
-    // })
-    function handleModalAddSubmit(e) {
-        //     e.preventDefault();
-        //     var user = utils.formToObject('#form-add');
-        //     let error = null;
-        //     if (utils.IsNullOrEmpty(user.FullName))
-        //         error = "Họ tên không được để trông";
-        //     else if (utils.IsNullOrEmpty(user.UserName))
-        //         error = "Tên tài khoản không được để trống";
-        //     else if (utils.IsNullOrEmpty(user.Password) || user.Password.length < 6)
-        //         error = "Mật khẩu không được nhỏ hơn 6 kí tự";
-        //     else if (utils.IsNullOrEmpty(user.RoleId))
-        //         error = "Chưa chọn vị trí";
-        //     if (error != null) {
-        //         alertify.alert(error);
-        //     } else {
-        //         user.RoleId = parseInt(user.RoleId);
-        //         user.Avatar = CURRENT_IMG_PATH;
-        //         utils.ajaxPost('User', user,
-        //             function (rs) {
-        //                 if (rs.IsSuccess) {
-        //                     $('#form-add')[0].reset();
-        //                     $imgAvatarAdd.attr('src', '/images/default-image.png');
-        //                     alertify.success("Thêm thành công")
-        //                     utils.hideModal('#modal-add')
-        //                     $('#form-add').trigger('reset');
-        //                     CURRENT_IMG_PATH = null;
-        //                     reloadTable();
-        //                 } else {
-        //                     alertify.error(rs.Message);
-        //                 }
-        //             }
-        //         );
-        //     }
-
-    };
-
-    /*Binding file edit  */
-    function handleModalEditSubmit(e) {
-        //     e.preventDefault();
-        //     var user = utils.formToObject('#form-edit');
-        //     let error = null;
-        //     if (utils.IsNullOrEmpty(user.FullName))
-        //         error = "Họ tên không được để trông";
-        //     else if (utils.IsNullOrEmpty(user.UserName))
-        //         error = "Tên tài khoản không được để trống";
-        //     else if (utils.IsNullOrEmpty(user.RoleId))
-        //         error = "Chưa chọn vị trí";
-        //     if (error != null) {
-        //         alertify.alert(error);
-        //     } else {
-        //         user.RoleId = parseInt(user.RoleId);
-        //         user.Avatar = CURRENT_IMG_PATH;
-        //         user.Id = CURRENT_USER_ID;
-        //         utils.ajaxPut('User/' + CURRENT_USER_ID, user,
-        //             function (rs) {
-        //                 if (rs.IsSuccess) {
-        //                     alertify.success("Cập nhật thành công")
-        //                     CURRENT_IMG_PATH = null;
-        //                     utils.hideModal('#modal-edit')
-        //                     $('#form-edit').trigger('reset');
-        //                     reloadTable();
-        //                 } else {
-        //                     alertify.error(rs.Message);
-        //                 }
-        //             }
-        //         );
-        //     }
-    };
-
-
-    // /*Binding search */
-    // $('#ipt-text-search').on('keypress', function (e) {
-    //     setTimeout(function () {
-    //         var KEY_WORD = e.target.value;
-    //         reloadTable();
-    //     }, 200)
-    // });
-
-    // /*Binding change role */
-    // $('#sl-role').change(() => reloadTable());
-
-    // /*Binding change status */
-    // $('#sl-status').change(() => reloadTable());
-
-    // /*Binding search */
-    // $('#btn-delete').on('click', function (e) {
-    //     alertify.confirm("Xác nhận xóa tài khoản", function () {
-    //         utils.ajaxDelete('User/' + CURRENT_USER_ID, function (res) {
-    //             if (res.IsSuccess) {
-    //                 alertify.success("Xóa thành công")
-    //                 reloadTable()
-    //                 utils.hideModal('#modal-edit');
-    //             }
-    //             else alertify.error(res.Message);
-    //         });
-    //     });
-    // });
-
-    /*FUNCTION*/
-
     /*Hiển thị modal edit*/
     function showModalEdit(id) {
         setModalEdit(true);
@@ -205,9 +114,7 @@ function Account(props) {
             try {
                 const response = await userApi.get(id)
                 if (response.isSuccess) {
-                    // console.log('res: ', response.data)
                     setInfoUser(response.data)
-                    // console.log('info:', infoUser)
                 }
             }
             catch (e) {
@@ -215,76 +122,22 @@ function Account(props) {
             }
         }
         getInfoUser();
-        // try {
-        //     CURRENT_USER_ID = id;
-        //     utils.ajaxGet('User/' + id, null, function (res) {
-        //         if (res.IsSuccess) {
-        //             let data = res.Result;
-        //             CURRENT_IMG_PATH = utils.getImagePath(data.Avatar);
-        //             $formEdit.find('input[name="FullName"]').val(data.FullName);
-        //             $formEdit.find('input[name="Phone"]').val(data.Phone);
-        //             $formEdit.find('input[name="Email"]').val(data.Email);
-        //             $formEdit.find('input[name="UserName"]').val(data.UserName);
-        //             $formEdit.find('select[name="RoleId"]').val(data.RoleId);
-        //             $imgAvatarEdit.attr('src', utils.getImagePath(CURRENT_IMG_PATH));
-        //             utils.showModal('#modal-edit');
-
-        //         } else {
-        //             alertify.error(res.Message);
-        //         }
-        //     });
-
-        // } catch (e) {
-        //     alertify.error("Có lỗi xảy ra");
-        // }
-        // utils.showModal("#modal-edit");
     }
+
+    // Modal
     function setModalFalse() {
         setModalEdit(false);
         setModalResetPassword(false)
         setModalAddAccount(false)
-        // setUserName();
     }
 
-
-
-    function initSelectRole() {
-
-        let html = "";
-        utils.ajaxGet('user/GetAllPosition', '', function (res) {
-            if (res.IsSuccess) {
-                var data = res.Result;
-                html += data.map(n => `<option value="${n.Id}">${n.Name}</option>`);
-                $("#sl-role-add").html(html);
-                $("#sl-role-edit").html(html);
-                $("#sl-role").append(html);
-            }
-        })
-
-
-    }
-
+    // Đổi mật khẩu
     function changePassword(id) {
         setModalResetPassword(true);
-        // utils.showModal('#modal-change-pass');
-        // $("#form-change-pass").trigger("reset");
-        // $('#modal-change-pass').find("#form-change-pass").unbind().on('submit', function (e) {
-        //     e.preventDefault();
-        //     let text = utils.formToObject("#form-change-pass").Password;
-        //     if (utils.IsNullOrEmpty(text) || text.length < 6)
-        //         alertify.error("Mật khẩu không được nhỏ hơn 6 kí tự");
-        //     else {
-        //         utils.ajaxPost('User/ResetPassword/' + id, {
-        //             NewPassword: text
-        //         }, function (res) {
-        //             if (res.IsSuccess) {
-        //                 alertify.alert("Đổi mật khẩu thành công")
-        //                 utils.hideModal('#modal-change-pass');
-        //             }
-        //         })
-        //     }
-        // })
+        setUserId(id);
     }
+
+    // Khóa - Mở khóa tài khoản 
     function toggleStatus(id, curentStatus, fullName) {
         let newSttName = curentStatus == 1 ? 'Khóa' : 'Mở khóa'
         alertify.confirm("Xác nhận '' " + newSttName + " '' tài khoản '' " + fullName + " ''", function () {
@@ -304,6 +157,27 @@ function Account(props) {
     }
     return (
         <>
+            {/* <div className="App">
+                <h2>Using CKEditor 5 build in React</h2>
+                <CKEditor
+                    editor={ClassicEditor}
+                    data="<p>Hello from CKEditor 5!</p>"
+                    onReady={editor => {
+                        // You can store the "editor" and use when it is needed.
+                        console.log('Editor is ready to use!', editor);
+                    }}
+                    onChange={(event, editor) => {
+                        const data = editor.getData();
+                        console.log({ data });
+                    }}
+                    onBlur={(event, editor) => {
+                        console.log('Blur.', editor);
+                    }}
+                    onFocus={(event, editor) => {
+                        console.log('Focus.', editor);
+                    }}
+                />
+            </div> */}
             <div className="container-fluid">
                 <div className="row">
                     <div className="col-12">
@@ -330,7 +204,6 @@ function Account(props) {
                                     </div>
                                     <div className="mt-4">
                                         <h5 className="text-primary">Chức vụ</h5>
-                                        {/* <Select blurInputOnSelect={true} value={optionsRole[0]} options={optionsRole} onChange={(val) => { setRoleValue({ target: { name: val.name, value: val.value } }) }} /> */}
                                         <select className="form-control " id="sl-role" onChange={(e) => setRoleValue(e.target.value)} value={roleValue}>
                                             <option value='0'> Tất cả </option>
                                             {
@@ -353,7 +226,6 @@ function Account(props) {
                                 </div>
                                 <div className="page-aside-right">
                                     {/* <!-- Table --> */}
-                                    {/* className="table table-centered table-hover dt-responsive nowrap w-100" */}
                                     <Table striped responsive="lg" id="products-datatable">
                                         <thead>
                                             <tr>
@@ -376,7 +248,7 @@ function Account(props) {
                                                     <tr key={index}>
                                                         <td className="align-middle">{index + 1}</td>
                                                         <td className="align-middle ">
-                                                            <img src="${utils.getImagePath(item.avatar)}" className="mr-2 rounded-circle" />
+                                                            <Image src={item.avatar !== '' ? process.env.REACT_APP_API_URL + item.avatar : "/images/default-avatar.jpg"} thumbnail={true} roundedCircle={true} width='60' height='60' />
                                                         </td>
                                                         <td className="align-middle ">{item.fullName}</td>
                                                         <td className="align-middle">{item.phoneNumber}</td>
@@ -386,18 +258,18 @@ function Account(props) {
                                                         <td className="align-middle">
                                                             <span className={clsx('badge', item.status === 1 ? 'badge-success-lighten' : 'badge-danger-lighten')}>{(item.status == 1 ? 'Đang hoạt động' : 'Khóa')}</span>
                                                         </td>
-                                                        <td className=" text-center ">
+                                                        <td className=" text-center align-middle ">
                                                             <Dropdown className="d-inline mx-2">
                                                                 <Dropdown.Toggle id="dropdown-autoclose-true">
                                                                     <i className="text-light mdi mdi-dots-vertical font-18 text-primary"></i>
                                                                 </Dropdown.Toggle>
 
-                                                                <Dropdown.Menu>
-                                                                    <Dropdown.Item onClick={() => showModalEdit(item.id)}>Chỉnh sửa tài khoản</Dropdown.Item>
+                                                                <Dropdown.Menu style={{ margin: 0 }}>
+                                                                    <Dropdown.Item onClick={() => showModalEdit(item.id)}><i className="mdi mdi-window-restore "></i>Chi tiết</Dropdown.Item>
                                                                     <Dropdown.Divider />
-                                                                    <Dropdown.Item onClick={() => changePassword(item.id)} >Đặt lại mật khẩu</Dropdown.Item>
+                                                                    <Dropdown.Item onClick={() => changePassword(item.id)} ><i className="mdi mdi-lock-reset "></i>Đặt lại mật khẩu</Dropdown.Item>
                                                                     <Dropdown.Divider />
-                                                                    <Dropdown.Item onClick={() => toggleStatus(item.id, item.status, item.fullName)}>{item.status === 1 ? 'Khóa' : 'Mở khóa'}</Dropdown.Item>
+                                                                    <Dropdown.Item onClick={() => toggleStatus(item.id, item.status, item.fullName)}><i className="mdi mdi-lock-outline "></i>{item.status === 1 ? 'Khóa' : 'Mở khóa'}</Dropdown.Item>
                                                                 </Dropdown.Menu>
                                                             </Dropdown>
                                                         </td>
@@ -412,17 +284,17 @@ function Account(props) {
                     </div>
                 </div>
             </div>
-            {/* <!--  Modal change pas --> */}
-            <ResetPassword show={modalResetPassword} setModalFalse={setModalFalse} reloadTable={reloadTable} />
+            {/* Modal đổi mật khẩu */}
+            <ResetPassword show={modalResetPassword} userId={userId} setModalFalse={setModalFalse} reloadTable={reloadTable} />
 
             {/* Modal tạo tài khoản */}
             <AddAccount show={modalAddAccount} setModalFalse={setModalFalse} reloadTable={reloadTable} />
 
-
             {/* Modal chỉnh sửa tài khoản */}
             <EditAccount show={modalEdit} infoUser={infoUser} setModalFalse={setModalFalse} reloadTable={reloadTable} />
 
-
+            {/* // Summber note  */}
+            <div id="summernote"></div>
 
         </>
     );

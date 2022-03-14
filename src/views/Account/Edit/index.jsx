@@ -19,7 +19,7 @@ function EditAccount(props) {
             fullName: "",
             userName: "",
             phoneNumber: "",
-            avatar: '',
+            avatarPath: '',
             role: '',
             email: ''
         }
@@ -37,18 +37,24 @@ function EditAccount(props) {
             }
         }
         getRoles()
-        setUserData(infoUser)
-        // setRoleValue(infoUser.role)
+        setUserData({
+            userId: infoUser.userId,
+            fullName: infoUser.fullName,
+            userName: infoUser.userName,
+            phoneNumber: infoUser.phoneNumber,
+            avatarPath: infoUser.avatar,
+            role: infoUser.role,
+            email: infoUser.email
+        })
     }, [infoUser])
 
     // Hiển thị Modal
     useEffect(() => {
         setShowModal(show)
     }, [show])
-    // console.log('user-data', userData)
-    console.log('user-data', userData)
+
+    // Xử lý update user
     function handleUpdateUser() {
-        console.log('update user');
         (
             async function () {
                 try {
@@ -66,6 +72,29 @@ function EditAccount(props) {
         )()
     }
 
+    // Xử lý xóa user
+    function handleDeleteUser(id, fullName) {
+        alertify.confirm(`Bạn có chắc chắn muốn xóa tài khoản ' ${fullName} '`,
+            function () {
+                (async function () {
+                    try {
+                        const response = await userApi.delete(id)
+                        if (response.isSuccess) {
+                            alertify.success("Xóa tài khoản thành công")
+                            reloadTable()
+                            setModalFalse()
+                        } else {
+                            alertify.error("Xóa tài khoản thất bại")
+                            setModalFalse()
+                        }
+                    }
+                    catch (e) {
+                        console.error(e)
+                    }
+                })()
+            }
+        )
+    }
 
     return (
         <Modal
@@ -87,7 +116,7 @@ function EditAccount(props) {
                             <div className="row">
                                 <div className="col-md-4">
                                     <div className="form-group text-center">
-                                        <img className="img-fluid cursor-pointer rounded-circle col-md-8" id="img-avatar-edit" src="/images/default-avatar.jpg" alt='img' />
+                                        <img className="img-fluid  col-md-8" id="img-avatar-edit" src={userData.avatarPath !== '' ? process.env.REACT_APP_API_URL + userData.avatarPath : "/images/default-avatar.jpg"} alt='img' />
                                     </div>
                                 </div>
                                 <div className="col-md-8">
@@ -108,7 +137,6 @@ function EditAccount(props) {
                                 </div>
                                 <div className="form-group col-md-6">
                                     <label>Chức vụ <span className="text-danger">*</span></label>
-                                    {/* <Select array={['Tất cả', 'Admin', 'Intem']} nameclass={['select2 form-control']} state={[unit, setUnit]} />/> */}
                                     <select className="form-control " id="sl-role" value={userData.role || ''} onChange={(e) => setUserData({ ...userData, role: e.target.value })} >
                                         {
                                             roleSelect.map((item, index) => (
@@ -129,10 +157,10 @@ function EditAccount(props) {
                 </div>
             </Modal.Body>
             <Modal.Footer>
-                <button id="btn-delete" type="button" className="btn btn-danger m-w-100 mr-auto ml-1"><i className="mdi mdi-trash-can mr-1"></i>Xoá</button>
+                <button id="btn-delete" type="button" className="btn btn-danger m-w-100 mr-auto ml-1" onClick={() => handleDeleteUser(userData.userId, userData.fullName)}><i className="mdi mdi-trash-can mr-1"></i>Xoá</button>
                 <button id="btn-edit-branch" type="submit" className="btn btn-primary ml-1" onClick={() => {
                     handleUpdateUser(userData);
-                    setModalFalse(false)
+                    setModalFalse()
                 }}>
                     <i className="mdi mdi-check mr-1" ></i>Cập nhật
                 </button>
@@ -141,7 +169,6 @@ function EditAccount(props) {
                 }}><i className="mdi mdi-block-helper mr-1"></i>Đóng</button>
             </Modal.Footer>
         </Modal >
-
     );
 }
 export default EditAccount;

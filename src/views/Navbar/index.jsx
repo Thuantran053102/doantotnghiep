@@ -5,9 +5,16 @@ import './Navbar.scss'
 import Dashboard from "./../Dashboard/index";
 import Product from "./../Product/index";
 import Customer from "./../Customer/index";
+import Dropdown from "react-bootstrap/Dropdown";
 
 
 function Navbar() {
+    function profileUser() {
+
+    }
+    function logout() {
+
+    }
     return (
         <>
             <div className="topnav">
@@ -72,16 +79,27 @@ function Navbar() {
                                 <li className="dropdown notification-list pr-2">
                                     <a className="nav-link dropdown-toggle nav-user arrow-none mr-0 nav-user-custom cursor-pointer" data-toggle="dropdown">
                                         <span className="account-user-avatar">
-                                            <img id="img-avatar" src="/images/default-avatar.jpg" onError="this.onerror = null; this.src = '/images/default-avatar.jpg'" className="rounded-circle" />
+                                            <img id="img-avatar" src="/images/default-avatar.jpg" alt="" className="rounded-circle" />
                                         </span>
                                         <span>
-                                            <span className="account-user-name" id="sp-user-name">guess</span>
-                                            <span className="account-position" id="sp-user-role">guess</span>
+                                            <span className="account-user-name" id="sp-user-name">Username</span>
+                                            <span className="account-position" id="sp-user-role">Role</span>
                                         </span>
                                     </a>
+                                    {/* <Dropdown className="d-inline mx-2">
+                                        <Dropdown.Toggle id="dropdown-autoclose-true">
+                                            <i className="text-light mdi mdi-dots-vertical font-18 text-primary"></i>
+                                        </Dropdown.Toggle>
+
+                                        <Dropdown.Menu style={{ margin: 0 }}>
+                                            <Dropdown.Item onClick={() => profileUser()}><i className="mdi mdi-account mr-1 font-16"></i>Cá nhân</Dropdown.Item>
+                                            <Dropdown.Divider />
+                                            <Dropdown.Item onClick={() => logout()} ><i className="mdi mdi-logout mr-1 font-16"></i>Đăng xuất</Dropdown.Item>
+                                        </Dropdown.Menu>
+                                    </Dropdown> */}
                                     <div className="dropdown-menu dropdown-menu-right dropdown-menu-animated topbar-dropdown-menu profile-dropdown">
-                                        <a href="javascript:showModal('#modal-profile')" className="cursor-pointer dropdown-item notify-item"><i className="mdi mdi-account mr-1 font-16"></i><span>Cá nhân</span></a>
-                                        <a href="javascript:logOut()" className="dropdown-item notify-item cursor-pointer"><i className="mdi mdi-logout mr-1 font-16"></i><span>Đăng xuất</span></a>
+                                        <a onClick={() => profileUser()} className="cursor-pointer dropdown-item notify-item"><i className="mdi mdi-account mr-1 font-16"></i><span>Cá nhân</span></a>
+                                        <a onClick={() => logout()} className="dropdown-item notify-item cursor-pointer"><i className="mdi mdi-logout mr-1 font-16"></i><span>Đăng xuất</span></a>
                                     </div>
                                 </li>
                             </ul>
@@ -89,11 +107,11 @@ function Navbar() {
                     </nav>
                 </div>
             </div>
-            <Routes>
+            {/* <Routes>
                 <Route path='/admin/dashboard' element={<Dashboard />}></Route>
                 <Route path='/admin/product' element={<Product />}></Route>
                 <Route path='/admin/customer' element={<Customer />}></Route>
-            </Routes>
+            </Routes> */}
         </>
     )
 }

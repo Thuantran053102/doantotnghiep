@@ -377,7 +377,7 @@ export function getImagePath(path) {
 
 /*check string is null or empty*/
 export function IsNullOrEmpty(text) {
-    if (text == undefined || text == null || text == undefined || text == NaN) return true;
+    if (text == undefined || text == null || text == '' || text == NaN) return true;
     if ($(text) == '') return true;
     return false;
 }

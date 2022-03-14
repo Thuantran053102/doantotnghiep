@@ -3,7 +3,7 @@ import Style from "./Post.module.scss"
 import { removeUnicode, changerangedate, getTowDayAgo, getDay, changeday } from '../../utils/utils'
 // import { FilterPost } from "../../utils/filterPost"
 
-import {Select,Buttom} from '../../components/'
+import { Select, Buttom } from '../../components/'
 import DateRangePicker from 'rsuite/DateRangePicker';
 import { startOfDay, endOfDay, addDays, subDays } from 'date-fns';
 import 'rsuite/dist/rsuite-rtl.min.css'
@@ -14,20 +14,21 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faXmark } from '@fortawesome/free-solid-svg-icons'
 import postApi from "../../api/Post";
 import jQuery from "jquery"
+import { alertify } from "alertifyjs";
 
 
 function Post() {
-   
+
     //get datenow
     var today = new Date();
     var datea = today.getDate() + '/' + (today.getMonth() + 1) + '/' + today.getFullYear();
 
     // list chọn
-    const categoryList = {'Tất cả':0, 'Tin tức':1, 'Khuyến mãi':2, 'Tư vấn':3, 'Tin tuyển dụng':4, 'Quy định và chính sách':5}
+    const categoryList = { 'Tất cả': 0, 'Tin tức': 1, 'Khuyến mãi': 2, 'Tư vấn': 3, 'Tin tuyển dụng': 4, 'Quy định và chính sách': 5 }
 
     // biến trung gian
     const presently = 'Ẩn', unPresently = 'Hiện'
-    
+
 
 
     const textMutedRef = useRef()
@@ -38,26 +39,26 @@ function Post() {
 
     // const [arrPortSearch,setArrPortSearch] =useState([...APIPost])
     // const [arrcate,setArrcate] =useState([...APIPost])
-    const statusList={0:'Ẩn',1:'Hiện'}
+    const statusList = { 0: 'Ẩn', 1: 'Hiện' }
 
 
-    const [arrayPost, setArrayPost] = useState([   {
-            "id": 1,
-            "title": "",
-            "status": 1,
-            "createdDate": "",
-            "userCreate": "",
-            "category": ""
+    const [arrayPost, setArrayPost] = useState([{
+        "id": 1,
+        "title": "",
+        "status": 1,
+        "createdDate": "",
+        "userCreate": "",
+        "category": ""
     }])
     const [testSearchValue, setTestSearchValue] = useState('')
     const [categoryValue, setCategoryValue] = useState(Object.keys(categoryList)[0])
     // const [dateValue, setDateValue] = useState(datea + ' - ' + datea)
-    const [numberPosts,setNumberPosts] =useState(20)
-    const [APIPost,setAPIPost] = useState([])
-    const [deletedPost,setDeletedPost]=useState(false)
-    console.log('deletedPost',deletedPost)
+    const [numberPosts, setNumberPosts] = useState(20)
+    const [APIPost, setAPIPost] = useState([])
+    const [deletedPost, setDeletedPost] = useState(false)
+    console.log('deletedPost', deletedPost)
     // get_posts API
-    
+
     useEffect(() => {
         const getAllUsers = async () => {
             try {
@@ -75,7 +76,7 @@ function Post() {
             }
         }
         getAllUsers()
-    }, [testSearchValue, categoryValue,numberPosts, deletedPost])
+    }, [testSearchValue, categoryValue, numberPosts, deletedPost])
 
     // daterangpicker 
     const {
@@ -138,12 +139,12 @@ function Post() {
         content[0].innerText = 'bạn có chắc muốn xóa mục này'
         // click nút đồng ý 
         const btnAgree = showRef.current.getElementsByClassName('btn_pri')
-        btnAgree[0].onclick = async ()=>{
+        btnAgree[0].onclick = async () => {
             try {
                 const response = await postApi.delete(id);
                 if (response.isSuccess) {
                     localStorage.setItem('user-token', JSON.stringify(response.valueid))
-                    actions.closeModal({ myref: showRef, myclass: Style.show }) 
+                    actions.closeModal({ myref: showRef, myclass: Style.show })
                     setDeletedPost(!deletedPost)
                     alertify.alert('Xóa thành công')
                 }
@@ -216,7 +217,7 @@ function Post() {
                                     <div className="mt-2">
                                         <h5 className="text-primary">Số bài viết</h5>
                                         <div className="form-group">
-                                            <select id="sel-record-search" className="form-control" onChange={e=>{setNumberPosts(e.target.value)} }data-toggle="select-no-search">
+                                            <select id="sel-record-search" className="form-control" onChange={e => { setNumberPosts(e.target.value) }} data-toggle="select-no-search">
                                                 <option value="20">20 bài viết</option>
                                                 <option value="30">30 bài viết</option>
                                                 <option value="50">50 bài viết</option>
@@ -262,8 +263,8 @@ function Post() {
                                                                 <td>{item.userCreate}</td>
                                                                 <td>{item.createdDate}</td>
                                                                 <td>
-                                                                    <span className={clsx('badge', item.status === 1 ? 'badge-success-lighten' : 'badge-danger-lighten')}>{(item.status == 1 ? unPresently : presently )}</span>
-                                            
+                                                                    <span className={clsx('badge', item.status === 1 ? 'badge-success-lighten' : 'badge-danger-lighten')}>{(item.status == 1 ? unPresently : presently)}</span>
+
                                                                 </td>
                                                                 <td className="text-center px-w-50" >
                                                                     <div className={clsx(Style.dropdown, "dropdown")} style={{ top: '0' }}>
@@ -271,7 +272,7 @@ function Post() {
                                                                         <div className={clsx(Style.dropdown_menu, 'dropdown-menu dropdown-menu-right')} ref={downMenuRef}>
                                                                             <a href="/nhung-ly-do-ban-nen-ve-sinh-may-lanh-thuong-xuyen" target="_blank" className="a-detail dropdown-item cursor-pointer"><i className="mdi mdi-window-restore mr-1"></i>Xem chi tiết</a>
                                                                             <a href="/admin/post/edit/69" className="a-detail dropdown-item cursor-pointer"><i className="mdi mdi-export mr-1"></i>Cập nhật tin tức</a>
-                                                                            <a onClick={() => { lookTypePost(item.id,statusList[item.status]) }} className="a-delete dropdown-item cursor-pointer"> <i className="mdi mdi-content-save-settings mr-1"></i>{trangthai} bài viết</a>
+                                                                            <a onClick={() => { lookTypePost(item.id, statusList[item.status]) }} className="a-delete dropdown-item cursor-pointer"> <i className="mdi mdi-content-save-settings mr-1"></i>{trangthai} bài viết</a>
                                                                             <a onClick={() => { deletePost(item.id) }} className="a-delete dropdown-item cursor-pointer"><i className="mdi mdi-trash-can-outline mr-1"></i>Xóa tin</a>
                                                                         </div>
                                                                     </div>

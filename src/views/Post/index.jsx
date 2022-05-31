@@ -42,12 +42,9 @@ function Post() {
 
     // const [arrPortSearch,setArrPortSearch] =useState([...APIPost])
     // const [arrcate,setArrcate] =useState([...APIPost])
-<<<<<<< HEAD
     const statusList = { 0: 'Ẩn', 1: 'Hiện' }
-=======
-    const statusList={0:'Ẩn',1:'Hiện'}
-    let idItem=0
->>>>>>> f47aea1e5a52b8e4cfe65503762abcf8797b85e4
+    let idItem = 0
+
 
 
     const [arrayPost, setArrayPost] = useState([{
@@ -281,13 +278,9 @@ function Post() {
                                                                         <a className="dropdown-toggle text-muted arrow-none cursor-pointer" data-toggle="dropdown"><i className="mdi mdi-dots-vertical font-18 text-primary" ></i></a>
                                                                         <div className={clsx(Style.dropdown_menu, 'dropdown-menu dropdown-menu-right')} ref={downMenuRef}>
                                                                             <a href="/nhung-ly-do-ban-nen-ve-sinh-may-lanh-thuong-xuyen" target="_blank" className="a-detail dropdown-item cursor-pointer"><i className="mdi mdi-window-restore mr-1"></i>Xem chi tiết</a>
-<<<<<<< HEAD
-                                                                            <a href="/admin/post/edit/69" className="a-detail dropdown-item cursor-pointer"><i className="mdi mdi-export mr-1"></i>Cập nhật tin tức</a>
+
+                                                                            <Link onClick={console.log(1)} to={`/admin/post/edit/${item.id}`} className="a-detail dropdown-item cursor-pointer"><i className="mdi mdi-export mr-1"></i>Cập nhật tin tức</Link>
                                                                             <a onClick={() => { lookTypePost(item.id, statusList[item.status]) }} className="a-delete dropdown-item cursor-pointer"> <i className="mdi mdi-content-save-settings mr-1"></i>{trangthai} bài viết</a>
-=======
-                                                                            <Link onClick={console.log(1)}  to={`/admin/post/edit/${item.id}`} className="a-detail dropdown-item cursor-pointer"><i className="mdi mdi-export mr-1"></i>Cập nhật tin tức</Link>
-                                                                            <a onClick={() => { lookTypePost(item.id,statusList[item.status]) }} className="a-delete dropdown-item cursor-pointer"> <i className="mdi mdi-content-save-settings mr-1"></i>{trangthai} bài viết</a>
->>>>>>> f47aea1e5a52b8e4cfe65503762abcf8797b85e4
                                                                             <a onClick={() => { deletePost(item.id) }} className="a-delete dropdown-item cursor-pointer"><i className="mdi mdi-trash-can-outline mr-1"></i>Xóa tin</a>
                                                                         </div >
                                                                     </div >
@@ -297,50 +290,50 @@ function Post() {
                                                         )
 
 
-})
+                                                    })
                                                 }
 
                                             </tbody >
                                         </table >
                                     </div >
-    <div className="row">
-        <div id="div-pagination-info" className="col-6 mt-2">
-            đang xem
+                                    <div className="row">
+                                        <div id="div-pagination-info" className="col-6 mt-2">
+                                            đang xem
 
-            <b> {arrayPost.length} </b> -
+                                            <b> {arrayPost.length} </b> -
 
-            <b> 1 </b>
-            trong
-            <b> {arrayPost.length} </b>
-            bài viết
-        </div>
-        <div className="col-6"><div id="div-pagination-selection" className="float-right mb-3 mt-1"></div></div>
-    </div>
+                                            <b> 1 </b>
+                                            trong
+                                            <b> {arrayPost.length} </b>
+                                            bài viết
+                                        </div>
+                                        <div className="col-6"><div id="div-pagination-selection" className="float-right mb-3 mt-1"></div></div>
+                                    </div>
                                 </div >
                             </div >
                         </div >
                     </div >
                 </div >
-    {/* thông báo ẩn hiện tin  */ }
-    < div className = { clsx(Style.modal) } ref = { showRef } style = {{ position: 'absolute', display: 'block' }}>
-        <div className={clsx(Style.announce)}>
-            <div className={clsx(Style.title)}>
-                <h5>Thông Báo</h5>
-                <span onClick={() => { actions.closeModal({ myref: showRef, myclass: Style.show }) }} ><FontAwesomeIcon icon={faXmark} /></span>
-            </div>
-            <div className={clsx(Style.description)}>
-            </div>
-            <div className={clsx(Style.footer)}>
-                <Buttom spanClass={['btn_pri']} iconClass={['mdi-check']} func={() => { }} content='đồng ý' />
-                <Buttom spanClass={['mr-2', 'ml-2']} iconClass={['mdi-cancel']} func={() => { actions.closeModal({ myref: showRef, myclass: Style.show }) }} content='hủy bỏ' />
-            </div>
-        </div>
-                </ >
+                {/* thông báo ẩn hiện tin  */}
+                <div div className={clsx(Style.modal)} ref={showRef} style={{ position: 'absolute', display: 'block' }}>
+                    <div className={clsx(Style.announce)}>
+                        <div className={clsx(Style.title)}>
+                            <h5>Thông Báo</h5>
+                            <span onClick={() => { actions.closeModal({ myref: showRef, myclass: Style.show }) }} ><FontAwesomeIcon icon={faXmark} /></span>
+                        </div>
+                        <div className={clsx(Style.description)}>
+                        </div>
+                        <div className={clsx(Style.footer)}>
+                            <Buttom spanClass={['btn_pri']} iconClass={['mdi-check']} func={() => { }} content='đồng ý' />
+                            <Buttom spanClass={['mr-2', 'ml-2']} iconClass={['mdi-cancel']} func={() => { actions.closeModal({ myref: showRef, myclass: Style.show }) }} content='hủy bỏ' />
+                        </div>
+                    </div>
+                </div >
 
             </div >
-    <Routes>
-        <Route path={`/admin/post/edit/:id`} element={<Edit />}></Route>
-    </Routes>
+            <Routes>
+                <Route path={`/admin/post/edit/:id`} element={<Edit />}></Route>
+            </Routes>
         </>
     )
 }

@@ -92,7 +92,6 @@ function Login(props) {
                          </div>
                     </div>
                </div>
-               <div className="footer footer-alt">2022 &copy; Nguyễn Minh Hiếu - Trần Văn Thuận - Huỳnh Văn Thảo</div>
           </div>
 
      );

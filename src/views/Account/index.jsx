@@ -293,8 +293,7 @@ function Account(props) {
             {/* Modal chỉnh sửa tài khoản */}
             <EditAccount show={modalEdit} infoUser={infoUser} setModalFalse={setModalFalse} reloadTable={reloadTable} />
 
-            {/* // Summber note  */}
-            <div id="summernote"></div>
+
 
         </>
     );

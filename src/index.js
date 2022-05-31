@@ -4,16 +4,16 @@ import './index.css';
 
 import App from "./App"
 import reportWebVitals from './reportWebVitals';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import StoreProvider from './store'
-import Navbar from "./views/Navbar/index";
+import Navbar from "./views/Navbar";
+import Footer from "./views/Footer";
+import Login from "./views/Login/index";
+import Dashboard from "./views/Dashboard/index";
 
 ReactDOM.render(
     <React.StrictMode >
-        <BrowserRouter >
-        <Navbar/>
-            <App />
-        </BrowserRouter>
+       <App/>
     </React.StrictMode >,
     document.getElementById('root')
 );
